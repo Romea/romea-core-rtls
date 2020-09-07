@@ -43,7 +43,7 @@ add_library(romea_rtls
 # add_dependencies(trackbod_driver ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 # Specify libraries to link a library or executable target against
- target_link_libraries(romea_rtls ${catkin_LIBRARIES} yaml-cpp)
+ target_link_libraries(romea_rtls ${catkin_LIBRARIES})
 
 
 
