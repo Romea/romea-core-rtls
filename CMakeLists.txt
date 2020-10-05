@@ -1,110 +1,76 @@
-cmake_minimum_required(VERSION 2.8.3)
-project(romea_rtls)
+cmake_minimum_required(VERSION 3.5)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -std=c++17 ")
+project(
+  "romea_rtls"
+  VERSION 0.1.0
+  #  DESCRIPTION
+  #  HOMEPAGE_URL
+  LANGUAGES CXX)
 
-#######################
-## Find dependencies ##
-#######################
-set(${PROJECT_NAME}_CATKIN_DEPS romea_common)
-find_package(catkin REQUIRED COMPONENTS ${${PROJECT_NAME}_CATKIN_DEPS})
+find_package(romea_common REQUIRED)
 
-find_package( PkgConfig )
-pkg_check_modules( EIGEN3 REQUIRED eigen3 )
-
-###################################
-## catkin specific configuration ##
-###################################
-catkin_package(
-  INCLUDE_DIRS include
-  LIBRARIES ${PROJECT_NAME}
-  CATKIN_DEPENDS ${${PROJECT_NAME}_CATKIN_DEPS})
-
-###########
-## Build ##
-###########
-
-include_directories(
-  include
-  SYSTEM ${catkin_INCLUDE_DIRS}
-  SYSTEM ${EIGEN3_INCLUDE_DIRS}
-  )
-
-# Declare a C++ library
-add_library(romea_rtls
+add_library(${PROJECT_NAME} SHARED
   src/RTLSRangeNoise.cpp
   src/RTLSRangeRandomNoise.cpp
   src/RTLSTransceiverFunction.cpp
-  src/RTLSTransceiverPhy.cpp)
+  src/RTLSTransceiverPhy.cpp
+  )
 
-## Add cmake target dependencies of the library
-## as an example, code may need to be generated before libraries
-## either from message generation or dynamic reconfigure
-# add_dependencies(trackbod_driver ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_include_directories(${PROJECT_NAME} PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
-# Specify libraries to link a library or executable target against
- target_link_libraries(romea_rtls ${catkin_LIBRARIES})
+target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC
+  ${romea_common_INCLUDE_DIRS})
 
+target_compile_options(${PROJECT_NAME} PRIVATE
+  -Wall -Wextra -O3 -std=c++17)
 
+target_link_libraries(${PROJECT_NAME} PUBLIC
+  romea_common::romea_common)
 
-#############
-## Install ##
-#############
+include(GNUInstallDirs)
 
-# all install targets should use catkin DESTINATION variables
-# See http://ros.org/doc/api/catkin/html/adv_user_guide/variables.html
+install(
+  TARGETS ${PROJECT_NAME}
+  EXPORT ${PROJECT_NAME}Targets
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
-## Mark executable scripts (Python etc.) for installation
-## in contrast to setup.py, you can choose the destination
-# install(PROGRAMS
-#   scripts/my_python_script
-#   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# )
+install(FILES package.xml DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME})
 
-## Mark executables and/or libraries for installation
-# install(TARGETS trackbod_driver trackbod_driver_node
-#   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# )
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+  "${PROJECT_NAME}ConfigVersion.cmake"
+  VERSION ${PROJECT_VERSION}
+  COMPATIBILITY SameMajorVersion)
 
-## Mark cpp header files for installation
-# install(DIRECTORY include/${PROJECT_NAME}/
-#   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-#   FILES_MATCHING PATTERN "*.h"
-#   PATTERN ".svn" EXCLUDE
-# )
+configure_package_config_file(
+  "${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in"
+  "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake" INSTALL_DESTINATION
+  ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake)
 
-## Mark other files for installation (e.g. launch and bag files, etc.)
-# install(FILES
-#   # myfile1
-#   # myfile2
-#   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-# )
+install(
+  EXPORT ${PROJECT_NAME}Targets
+  FILE ${PROJECT_NAME}Targets.cmake
+  NAMESPACE ${PROJECT_NAME}::
+  DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake)
 
-#############
-## Testing ##
-#############
+install(FILES "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+  "${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+  DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake)
 
-#get_filename_component(TEST_WITH_DATA_TEST_DIR "test/data" ABSOLUTE)
-#configure_file(test/test_helper.h.in test/test_helper.h)
-#include_directories(${CMAKE_CURRENT_BINARY_DIR}/test)
-#if(CATKIN_ENABLE_TESTING)
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME}
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
-#  catkin_add_gtest(${PROJECT_NAME}_test_4ws test/test_4ws.cpp )
-#  target_link_libraries(${PROJECT_NAME}_test_4ws ${PROJECT_NAME} ${catkin_LIBRARIES})
-
-#  catkin_add_gtest(${PROJECT_NAME}_test_1as test/test_1as.cpp )
-#  target_link_libraries(${PROJECT_NAME}_test_1as ${PROJECT_NAME} ${catkin_LIBRARIES})
-
-#  catkin_add_gtest(${PROJECT_NAME}_test_2ws test/test_2ws.cpp )
-#  target_link_libraries(${PROJECT_NAME}_test_2ws ${PROJECT_NAME} ${catkin_LIBRARIES})
-
-#  catkin_add_gtest(${PROJECT_NAME}_test_ss test/test_ss.cpp )
-#  target_link_libraries(${PROJECT_NAME}_test_ss ${PROJECT_NAME} ${catkin_LIBRARIES})
+set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/LICENSE")
 
 
-#endif(CATKIN_ENABLE_TESTING)
+#include_directories(include  ${EIGEN3_INCLUDE_DIRS})
 
-## Add folders to be run by python nosetests
-# catkin_add_nosetests(test)
+#option(BUILD_TESTS "BUILD WITH TESTS" OFF)
+#if(BUILD_TESTS)
+#  enable_testing()
+#  add_subdirectory(test)
+#endif(BUILD_TESTS)
