@@ -20,14 +20,6 @@ before_script:
  - git clone https://gitlab.com/VictorLamoine/ros_gitlab_ci.git
  - source ros_gitlab_ci/gitlab-ci.bash >/dev/null
 
-
-# kinetic
-kinetic:
-  image: ros:kinetic-robot
-  stage: build
-  script:
-      - catkin build --no-status --force-color
-
 # melodic
 melodic:
   image: ros:melodic-robot
