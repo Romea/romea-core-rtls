@@ -1,7 +1,7 @@
-#ifndef _romea_RTLSRange_hpp_
-#define _romea_RTLSRange_hpp_
+#ifndef INCLUDE_ROMEA_CORE_RTLS_RTLSRANGE_HPP_
+#define INCLUDE_ROMEA_CORE_RTLS_RTLSRANGE_HPP_
 
-//romea
+// romea
 #include <romea_core_common/time/Time.hpp>
 
 namespace romea
@@ -18,7 +18,6 @@ struct RTLSRange
     firstPathRxPowerLevel(firstPathRxPowerLevel),
     totalRxPowerLevel(totalRxPowerLevel)
   {
-
   }
 
 
@@ -28,7 +27,7 @@ struct RTLSRange
   unsigned char totalRxPowerLevel;
 };
 
-}
+}  // namespace romea
 
 
-#endif
+#endif  // INCLUDE_ROMEA_CORE_RTLS_RTLSRANGE_HPP_

@@ -23,7 +23,6 @@ RTLSTransceiverPhy::RTLSTransceiverPhy(const double & centreFrequency,
   maximal_range_(maximal_range),
   userPayloadMaximalLength_(userPayloadMaximalLength)
 {
-
 }
 
 //-----------------------------------------------------------------------------
@@ -69,19 +68,18 @@ const double & RTLSTransceiverPhy::getMaximalRange()const
 }
 
 //-----------------------------------------------------------------------------
-bool operator==(const RTLSTransceiverPhy & phy1,const RTLSTransceiverPhy & phy2)
+bool operator==(const RTLSTransceiverPhy & phy1, const RTLSTransceiverPhy & phy2)
 {
-  return std::abs(phy1.getCentreFrequency()-phy2.getCentreFrequency())<std::numeric_limits<double>::epsilon() &&
+  return std::abs(phy1.getCentreFrequency() - phy2.getCentreFrequency()) < std::numeric_limits<double>::epsilon() &&
       std::abs(phy1.getDataRate()-phy2.getDataRate())<std::numeric_limits<double>::epsilon() &&
       std::abs(phy1.getBandWidth()-phy2.getBandWidth())<std::numeric_limits<double>::epsilon() &&
       phy1.getPRF() == phy2.getPRF();
-
 }
 
 //-----------------------------------------------------------------------------
-bool operator!=(const RTLSTransceiverPhy & phy1,const RTLSTransceiverPhy & phy2)
+bool operator!=(const RTLSTransceiverPhy & phy1, const RTLSTransceiverPhy & phy2)
 {
-  return !(phy1==phy2);
+  return !(phy1 == phy2);
 }
 
-}
+}  // namespace romea

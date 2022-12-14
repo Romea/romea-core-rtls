@@ -5,20 +5,14 @@ namespace romea {
 //-----------------------------------------------------------------------------
 RTLSTransceiverFunction stringToFunction(const std::string & function)
 {
-  if(function=="listener")
+  if (function == "listener")
   {
     return RTLSTransceiverFunction::LISTENER;
-  }
-  else if(function=="initiator")
-  {
+  } else if (function == "initiator") {
     return RTLSTransceiverFunction::INITIATOR;
-  }
-  else if(function=="responder")
-  {
+  } else if (function == "responder") {
     return RTLSTransceiverFunction::RESPONDER;
-  }
-  else
-  {
+  } else {
     return RTLSTransceiverFunction::NONE;
   }
 }
@@ -39,5 +33,5 @@ std::string functionToString(const RTLSTransceiverFunction & function)
   }
 }
 
-}
+}  // namespace romea
 

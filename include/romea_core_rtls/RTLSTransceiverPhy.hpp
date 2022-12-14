@@ -1,11 +1,10 @@
-#ifndef _romea_RTLSTransceiverPhy_hpp_
-#define _romea_RTLSTransceiverPhy_hpp_
+#ifndef ROMEA_CORE_RTLS_RTLSTRANSCEIVERPHY_HPP_
+#define ROMEA_CORE_RTLS_RTLSTRANSCEIVERPHY_HPP_
 
 namespace romea{
 
 class RTLSTransceiverPhy
 {
-
 public :
 
   RTLSTransceiverPhy(const double &centreFrequency,
@@ -42,13 +41,12 @@ private :
   double minimal_range_;
   double maximal_range_;
   int userPayloadMaximalLength_;
-
 };
 
-bool operator==(const RTLSTransceiverPhy & phy1,const RTLSTransceiverPhy & phy2);
+bool operator==(const RTLSTransceiverPhy & phy1, const RTLSTransceiverPhy & phy2);
 
-bool operator!=(const RTLSTransceiverPhy & phy1,const RTLSTransceiverPhy & phy2);
+bool operator!=(const RTLSTransceiverPhy & phy1, const RTLSTransceiverPhy & phy2);
 
-}
+}  // namespace romea
 
-#endif
+#endif  // ROMEA_CORE_RTLS_RTLSTRANSCEIVERPHY_HPP_

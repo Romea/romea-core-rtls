@@ -1,12 +1,11 @@
-#ifndef _romea_RTLSRangeNoise_hpp_
-#define _romea_RTLSRangeNoise_hpp_
+#ifndef ROMEA_CORE_RTLS_RTLSRANGENOISE_HPP_
+#define ROMEA_CORE_RTLS_RTLSRANGENOISE_HPP_
 
 namespace romea
 {
 
 class RTLSRangeNoise
 {
-
 public :
 
   RTLSRangeNoise();
@@ -17,13 +16,10 @@ public :
   double computeStd(const double & range);
 
 private:
-
   double a_;
   double b_;
 };
 
+}  // namespace romea
 
-
-}
-
-#endif
+#endif  // ROMEA_CORE_RTLS_RTLSRANGENOISE_HPP_

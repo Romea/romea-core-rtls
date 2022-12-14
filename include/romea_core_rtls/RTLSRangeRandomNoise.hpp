@@ -1,18 +1,18 @@
-#ifndef _romea_RTLSRangeRandomNoise_hpp_
-#define _romea_RTLSRangeRandomNoise_hpp_
+#ifndef ROMEA_CORE_RTLS_RTLSRANGERANDOMNOISE_HPP
+#define ROMEA_CORE_RTLS_RTLSRANGERANDOMNOISE_HPP
 
-//romea
-#include "RTLSRangeNoise.hpp"
-
-//std
+// std
 #include <random>
+
+// romea
+#include "romea_core_rtls/RTLSRangeNoise.hpp"
+
 
 namespace romea
 {
 
 class RTLSRangeRandomNoise : public RTLSRangeNoise
 {
-
 public :
 
   RTLSRangeRandomNoise();
@@ -21,16 +21,13 @@ public :
                        const double & b);
 
 public:
-
   double draw(const double & range);
 
 private:
-
   std::default_random_engine generator_;
   std::normal_distribution<double> dist_;
 };
 
+}  // namespace romea
 
-}
-
-#endif
+#endif  // ROMEA_CORE_RTLS_RTLSRANGERANDOMNOISE_HPP

@@ -69,8 +69,7 @@ set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/LICENSE")
 
 #include_directories(include  ${EIGEN3_INCLUDE_DIRS})
 
-#option(BUILD_TESTS "BUILD WITH TESTS" OFF)
-#if(BUILD_TESTS)
+#if(BUILD_TESTING)
 #  enable_testing()
 #  add_subdirectory(test)
-#endif(BUILD_TESTS)
+#endif(BUILD_TESTING)

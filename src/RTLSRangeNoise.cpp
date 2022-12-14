@@ -8,7 +8,6 @@ RTLSRangeNoise::RTLSRangeNoise():
   a_(0),
   b_(0)
 {
-
 }
 
 //-----------------------------------------------------------------------------
@@ -26,4 +25,4 @@ double RTLSRangeNoise::computeStd(const double & range)
   return a_*range + b_;
 }
 
-}
+}  // namespace romea
