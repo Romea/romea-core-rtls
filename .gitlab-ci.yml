@@ -25,6 +25,7 @@ melodic:
   image: ros:melodic-robot
   stage: build
   script:
+    - (cd /usr/src/gtest; cmake . && make && cp *.a /usr/lib/)
     - catkin build --summarize --no-status --force-color
 
 # noetic
