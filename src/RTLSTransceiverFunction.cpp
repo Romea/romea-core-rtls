@@ -1,12 +1,15 @@
+// Copyright 2022 INRAE, French National Research Institute for Agriculture, Food and Environment
+// Add license
+
 #include "romea_core_rtls/RTLSTransceiverFunction.hpp"
 
-namespace romea {
+namespace romea
+{
 
 //-----------------------------------------------------------------------------
 RTLSTransceiverFunction stringToFunction(const std::string & function)
 {
-  if (function == "listener")
-  {
+  if (function == "listener") {
     return RTLSTransceiverFunction::LISTENER;
   } else if (function == "initiator") {
     return RTLSTransceiverFunction::INITIATOR;
@@ -21,17 +24,16 @@ RTLSTransceiverFunction stringToFunction(const std::string & function)
 std::string functionToString(const RTLSTransceiverFunction & function)
 {
   switch (function) {
-  case RTLSTransceiverFunction::LISTENER:
-   return "listener";
-  case RTLSTransceiverFunction::INITIATOR:
-   return "initiator";
-  case RTLSTransceiverFunction::RESPONDER:
-   return "responder";
-  default:
-    return "none";
-    break;
+    case RTLSTransceiverFunction::LISTENER:
+      return "listener";
+    case RTLSTransceiverFunction::INITIATOR:
+      return "initiator";
+    case RTLSTransceiverFunction::RESPONDER:
+      return "responder";
+    default:
+      return "none";
+      break;
   }
 }
 
 }  // namespace romea
-

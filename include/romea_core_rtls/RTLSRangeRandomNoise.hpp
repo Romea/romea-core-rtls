@@ -1,5 +1,8 @@
-#ifndef ROMEA_CORE_RTLS_RTLSRANGERANDOMNOISE_HPP
-#define ROMEA_CORE_RTLS_RTLSRANGERANDOMNOISE_HPP
+// Copyright 2022 INRAE, French National Research Institute for Agriculture, Food and Environment
+// Add license
+
+#ifndef ROMEA_CORE_RTLS__RTLSRANGERANDOMNOISE_HPP
+#define ROMEA_CORE_RTLS__RTLSRANGERANDOMNOISE_HPP
 
 // std
 #include <random>
@@ -13,12 +16,12 @@ namespace romea
 
 class RTLSRangeRandomNoise : public RTLSRangeNoise
 {
-public :
-
+public:
   RTLSRangeRandomNoise();
 
-  RTLSRangeRandomNoise(const double & a,
-                       const double & b);
+  RTLSRangeRandomNoise(
+    const double & a,
+    const double & b);
 
 public:
   double draw(const double & range);
@@ -30,4 +33,4 @@ private:
 
 }  // namespace romea
 
-#endif  // ROMEA_CORE_RTLS_RTLSRANGERANDOMNOISE_HPP
+#endif  // ROMEA_CORE_RTLS__RTLSRANGERANDOMNOISE_HPP

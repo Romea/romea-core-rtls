@@ -1,3 +1,6 @@
+// Copyright 2022 INRAE, French National Research Institute for Agriculture, Food and Environment
+// Add license
+
 #include "romea_core_rtls/RTLSTransceiverPhy.hpp"
 
 #include <limits>
@@ -7,26 +10,27 @@ namespace romea
 {
 
 //-----------------------------------------------------------------------------
-RTLSTransceiverPhy::RTLSTransceiverPhy(const double & centreFrequency,
-                                       const double & dataRate,
-                                       const double & bandWidth,
-                                       const int & prf,
-                                       const double & minimal_range,
-                                       const double & maximal_range,
-                                       const int &userPayloadMaximalLength):
+RTLSTransceiverPhy::RTLSTransceiverPhy(
+  const double & centreFrequency,
+  const double & dataRate,
+  const double & bandWidth,
+  const int & prf,
+  const double & minimal_range,
+  const double & maximal_range,
+  const int & userPayloadMaximalLength) :
 
-  centreFrequency_(centreFrequency),
-  dataRate_(dataRate),
-  bandWidth_(bandWidth),
-  prf_(prf),
-  minimal_range_(minimal_range),
-  maximal_range_(maximal_range),
-  userPayloadMaximalLength_(userPayloadMaximalLength)
+centreFrequency_(centreFrequency),
+dataRate_(dataRate),
+bandWidth_(bandWidth),
+prf_(prf),
+minimal_range_(minimal_range),
+maximal_range_(maximal_range),
+userPayloadMaximalLength_(userPayloadMaximalLength)
 {
 }
 
 //-----------------------------------------------------------------------------
-const int &RTLSTransceiverPhy::getUserPayloadMaximalLength()const
+const int & RTLSTransceiverPhy::getUserPayloadMaximalLength()const
 {
   return userPayloadMaximalLength_;
 }
@@ -70,10 +74,13 @@ const double & RTLSTransceiverPhy::getMaximalRange()const
 //-----------------------------------------------------------------------------
 bool operator==(const RTLSTransceiverPhy & phy1, const RTLSTransceiverPhy & phy2)
 {
-  return std::abs(phy1.getCentreFrequency() - phy2.getCentreFrequency()) < std::numeric_limits<double>::epsilon() &&
-      std::abs(phy1.getDataRate()-phy2.getDataRate())<std::numeric_limits<double>::epsilon() &&
-      std::abs(phy1.getBandWidth()-phy2.getBandWidth())<std::numeric_limits<double>::epsilon() &&
-      phy1.getPRF() == phy2.getPRF();
+  return std::abs(phy1.getCentreFrequency() - phy2.getCentreFrequency()) <
+         std::numeric_limits<double>::epsilon() &&
+         std::abs(phy1.getDataRate() - phy2.getDataRate()) <
+         std::numeric_limits<double>::epsilon() &&
+         std::abs(phy1.getBandWidth() - phy2.getBandWidth()) <
+         std::numeric_limits<double>::epsilon() &&
+         phy1.getPRF() == phy2.getPRF();
 }
 
 //-----------------------------------------------------------------------------
