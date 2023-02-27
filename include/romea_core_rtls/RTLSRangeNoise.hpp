@@ -2,7 +2,7 @@
 // Add license
 
 #ifndef ROMEA_CORE_RTLS__RTLSRANGENOISE_HPP_
-#define ROMEA_CORE_RTLS_RTLSRANGENOISE_HPP_
+#define ROMEA_CORE_RTLS__RTLSRANGENOISE_HPP_
 
 namespace romea
 {
