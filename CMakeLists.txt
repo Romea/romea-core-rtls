@@ -12,6 +12,7 @@ find_package(romea_core_common REQUIRED)
 add_library(${PROJECT_NAME} SHARED
   src/RTLSRangeNoise.cpp
   src/RTLSRangeRandomNoise.cpp
+  src/RTLSTransceiverEUID.cpp
   src/RTLSTransceiverFunction.cpp
   src/RTLSTransceiverPhy.cpp
   )
