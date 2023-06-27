@@ -13,26 +13,21 @@
 // limitations under the License.
 
 
-#ifndef ROMEA_CORE_RTLS__RTLSTRANSCEIVERFUNCTION_HPP_
-#define ROMEA_CORE_RTLS__RTLSTRANSCEIVERFUNCTION_HPP_
+#ifndef ROMEA_CORE_RTLS__RTLSTRANCEIVERSPAIRIDS_HPP_
+#define ROMEA_CORE_RTLS__RTLSTRANCEIVERSPAIRIDS_HPP_
 
 #include <string>
 
 namespace romea
 {
 
-enum class RTLSTransceiverFunction
+class RTLSTransceiversPairIDs
 {
-  INITIATOR,
-  RESPONDER,
-  LISTENER,
-  NONE
+public:
+  size_t initiator;
+  size_t responder;
 };
-
-RTLSTransceiverFunction stringToFunction(const std::string & function);
-
-std::string functionToString(const RTLSTransceiverFunction & function);
 
 }  // namespace romea
 
-#endif  // ROMEA_CORE_RTLS__RTLSTRANSCEIVERFUNCTION_HPP_
+#endif  // ROMEA_CORE_RTLS__RTLSTRANCEIVERSPAIRIDS_HPP_

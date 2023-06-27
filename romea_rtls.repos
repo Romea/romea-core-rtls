@@ -5,3 +5,6 @@ repositories:
     romea_core/romea_rtls:
         type: git
         url: git@gitlab-ssh.irstea.fr:romea_core/romea_rtls.git
+    romea_core/romea_rtls_transceiver:
+        type: git
+        url: git@gitlab-ssh.irstea.fr:romea_core/romea_rtls_transceiver.git

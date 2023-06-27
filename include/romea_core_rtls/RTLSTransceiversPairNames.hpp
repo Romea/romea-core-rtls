@@ -13,25 +13,21 @@
 // limitations under the License.
 
 
-#include "romea_core_rtls/RTLSTransceiverEUID.hpp"
+#ifndef ROMEA_CORE_RTLS__RTLSTRANCEIVERSPAIRNAMES_HPP_
+#define ROMEA_CORE_RTLS__RTLSTRANCEIVERSPAIRNAMES_HPP_
+
+#include <string>
 
 namespace romea
 {
 
-//-----------------------------------------------------------------------------
-bool operator==(
-  const RTLSTransceiverEUID & euid1,
-  const RTLSTransceiverEUID & euid2)
+class RTLSTransceiversPairNames
 {
-  return euid1.id == euid2.id && euid1.pan_id == euid2.pan_id;
-}
-
-//-----------------------------------------------------------------------------
-bool operator<(
-  const RTLSTransceiverEUID & euid1,
-  const RTLSTransceiverEUID & euid2)
-{
-  return euid1.pan_id * 65535 + euid1.id < euid2.pan_id * 65535 + euid2.id;
-}
+public:
+  std::string initiator;
+  std::string responder;
+};
 
 }  // namespace romea
+
+#endif  // ROMEA_CORE_RTLS__RTLSTRANCEIVERSPAIRNAMES_HPP_

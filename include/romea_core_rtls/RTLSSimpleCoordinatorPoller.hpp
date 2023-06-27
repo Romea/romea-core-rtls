@@ -13,31 +13,39 @@
 // limitations under the License.
 
 
-#include "romea_core_rtls/RTLSRangeRandomNoise.hpp"
+#ifndef ROMEA_RTLS__COORDINATORS_RTLSSIMPLECOORDINATORPOLLER_HPP_
+#define ROMEA_RTLS__COORDINATORS_RTLSSIMPLECOORDINATORPOLLER_HPP_
+
+
+// std
+#include <optional>
+
+// romea
+#include "romea_core_rtls/RTLSTransceiversPairIDs.hpp"
 
 namespace romea
 {
 
-//-----------------------------------------------------------------------------
-RTLSRangeRandomNoise::RTLSRangeRandomNoise()
-: RTLSRangeNoise(0, 0),
-  generator_(std::random_device{} ()),
-  dist_(0, 1)
+class RTLSSimpleCoordinatorPoller
 {
-}
+public:
+  RTLSSimpleCoordinatorPoller();
 
-//-----------------------------------------------------------------------------
-RTLSRangeRandomNoise::RTLSRangeRandomNoise(
-  const double & a,
-  const double & b)
-: RTLSRangeNoise(a, b)
-{
-}
+  void setNumberOfInitiators(const size_t & numberOfInitiators);
 
-//-----------------------------------------------------------------------------
-double RTLSRangeRandomNoise::draw(const double & range)
-{
-  return dist_(generator_) * computeStd(range);
-}
+  void setNumberOfResponders(const size_t & numberOfInitiators);
+
+  virtual RTLSTransceiversPairIDs poll();
+
+  virtual void reset();
+
+private:
+  size_t initiatorPollIndex_;
+  size_t numberOfInitators_;
+  size_t responderPollIndex_;
+  size_t numberOfResponders_;
+};
 
 }  // namespace romea
+
+#endif   // ROMEA_RTLS__COORDINATORS_RTLSCOORDINATORPOLLER_HPP_

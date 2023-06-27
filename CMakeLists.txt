@@ -8,13 +8,15 @@ project(
   LANGUAGES CXX)
 
 find_package(romea_core_common REQUIRED)
+find_package(romea_core_rtls_transceiver REQUIRED)
 
 add_library(${PROJECT_NAME} SHARED
-  src/RTLSRangeNoise.cpp
-  src/RTLSRangeRandomNoise.cpp
-  src/RTLSTransceiverEUID.cpp
-  src/RTLSTransceiverFunction.cpp
-  src/RTLSTransceiverPhy.cpp
+  src/RTLSSimpleCoordinator.cpp
+  src/RTLSSimpleCoordinatorPoller.cpp
+  src/RTLSGeoreferencedCoordinator.cpp
+  src/RTLSGeoreferencedCoordinatorPoller.cpp
+  src/RTLSTransceiversDiagnostics.cpp
+  src/RTLSTransceiversPairIDsMapping.cpp
   )
 
 target_include_directories(${PROJECT_NAME} PUBLIC
@@ -22,13 +24,15 @@ target_include_directories(${PROJECT_NAME} PUBLIC
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
 target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC
-  ${romea_core_common_INCLUDE_DIRS})
+  ${romea_core_common_INCLUDE_DIRS}
+  ${romea_core_rtls_transceiver_INCLUDE_DIRS})
 
 target_compile_options(${PROJECT_NAME} PRIVATE
   -Wall -Wextra -O3 -std=c++17)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
-  romea_core_common::romea_core_common)
+  romea_core_common::romea_core_common
+  romea_core_rtls_transceiver::romea_core_rtls_transceiver)
 
 include(GNUInstallDirs)
 
@@ -68,9 +72,9 @@ install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME}
 set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/LICENSE")
 
 
-#include_directories(include  ${EIGEN3_INCLUDE_DIRS})
+option(BUILD_TESTING "BUILD WITH TESTS" ON)
 
-#if(BUILD_TESTING)
-#  enable_testing()
-#  add_subdirectory(test)
-#endif(BUILD_TESTING)
+# if(BUILD_TESTING)
+#   enable_testing()
+#   add_subdirectory(test)
+# endif()

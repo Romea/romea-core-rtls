@@ -16,21 +16,24 @@
 #ifndef ROMEA_CORE_RTLS__RTLSRANGE_HPP_
 #define ROMEA_CORE_RTLS__RTLSRANGE_HPP_
 
+// std
+#include <cstdint>
+#include <vector>
+
 // romea
-#include <romea_core_common/time/Time.hpp>
+#include "romea_core_rtls/RTLSTransceiversPairNames.hpp"
+#include "romea_core_rtls_transceiver/RTLSTransceiverRangingResult.hpp"
 
 namespace romea
 {
 
 struct RTLSRange
 {
-  Duration duration;
-  double range;
-  unsigned char firstPathRxPowerLevel;
-  unsigned char totalRxPowerLevel;
+  RTLSTransceiversPairNames tranceivers;
+  RTLSTransceiverRangingResult ranging_result;
+  std::vector<uint8_t> payload;
 };
 
 }  // namespace romea
-
 
 #endif  // ROMEA_CORE_RTLS__RTLSRANGE_HPP_

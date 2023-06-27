@@ -12,4 +12,5 @@
     <build_type>cmake</build_type>
   </export>
   <depend>romea_core_common</depend>
+  <depend>romea_core_rtls_transceiver</depend>
 </package>
