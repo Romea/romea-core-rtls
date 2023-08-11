@@ -20,7 +20,7 @@
 #include <string>
 
 // romea
-#include "romea_core_rtls/RTLSTransceiversDiagnostics.hpp"
+#include "romea_core_rtls/coordination/RTLSTransceiversDiagnostics.hpp"
 
 namespace
 {
@@ -33,23 +33,28 @@ namespace romea
 {
 
 //-----------------------------------------------------------------------------
-RTLSTransceiversDiagnostics::RTLSTransceiversDiagnostics(const double & pollRate)
-: pollRate_(pollRate),
-  responderReliabilityMonitorings_(),
+RTLSTransceiversDiagnostics::RTLSTransceiversDiagnostics(
+  const double & pollRate,
+  const std::vector<std::string> & initiatorsNames,
+  const std::vector<std::string> & respondersNames)
+: responderReliabilityMonitorings_(),
   responderReliabilityDiagnostics_(),
   initiatorReliabilityMonitorings_(),
   initiatorReliabilityDiagnostics_()
 {
+  initInitiatorsDiagnostics_(pollRate, initiatorsNames);
+  initRespondersDiagnostics_(pollRate, respondersNames);
 }
 
 //-----------------------------------------------------------------------------
-void RTLSTransceiversDiagnostics::setRespondersNames(
+void RTLSTransceiversDiagnostics::initRespondersDiagnostics_(
+  const double & pollRate,
   const std::vector<std::string> & respondersNames)
 {
   responderReliabilityMonitorings_.clear();
   responderReliabilityDiagnostics_.clear();
 
-  size_t responder_monitorings_window_size = 2 * pollRate_ / respondersNames.size();
+  size_t responder_monitorings_window_size = 2 * pollRate / respondersNames.size();
 
   for (const std::string & responderName : respondersNames) {
     auto monitoring = std::make_unique<OnlineAverage>(
@@ -67,13 +72,14 @@ void RTLSTransceiversDiagnostics::setRespondersNames(
 }
 
 //-----------------------------------------------------------------------------
-void RTLSTransceiversDiagnostics::setInitiatorsNames(
+void RTLSTransceiversDiagnostics::initInitiatorsDiagnostics_(
+  const double & pollRate,
   const std::vector<std::string> & initiatorsNames)
 {
   initiatorReliabilityMonitorings_.clear();
   initiatorReliabilityDiagnostics_.clear();
 
-  size_t initiator_monitorings_window_size = 2 * pollRate_ / initiatorsNames.size();
+  size_t initiator_monitorings_window_size = 2 * pollRate / initiatorsNames.size();
 
   for (const std::string & initiator_name : initiatorsNames) {
     auto monitoring = std::make_unique<OnlineAverage>(
@@ -92,18 +98,19 @@ void RTLSTransceiversDiagnostics::setInitiatorsNames(
 
 //-----------------------------------------------------------------------------
 void RTLSTransceiversDiagnostics::update(
-  const RTLSTransceiversPairIDs & transceiverIDs,
-  const RTLSTransceiverRangingStatus & status)
+  const size_t & initiatorsPollIndex,
+  const size_t & respondersPollIndex,
+  const RTLSTransceiverRangingResult & rangingResult)
 {
   assert(!initiatorReliabilityMonitorings_.empty());
   assert(!responderReliabilityMonitorings_.empty());
 
-  if (status == RTLSTransceiverRangingStatus::FAILED) {
-    updateInitiatorReliability_(1 / 3., transceiverIDs.initiator);
-    updateResponderReliability_(1 / 3., transceiverIDs.responder);
+  if (!isEmpty(rangingResult)) {
+    updateInitiatorReliability_(1, initiatorsPollIndex);
+    updateResponderReliability_(1, respondersPollIndex);
   } else {
-    updateInitiatorReliability_(1, transceiverIDs.initiator);
-    updateResponderReliability_(1, transceiverIDs.responder);
+    updateInitiatorReliability_(1 / 3., initiatorsPollIndex);
+    updateResponderReliability_(1 / 3., respondersPollIndex);
   }
 }
 
@@ -129,16 +136,18 @@ void RTLSTransceiversDiagnostics::updateResponderReliability_(
 }
 
 //-----------------------------------------------------------------------------
-DiagnosticReport RTLSTransceiversDiagnostics::makeReport()const
+DiagnosticReport RTLSTransceiversDiagnostics::getInitiatorReport(const size_t & initiatorIndex)
+const
 {
-  DiagnosticReport report;
-  for (const auto & diagnostic : initiatorReliabilityDiagnostics_) {
-    report += diagnostic->getReport();
-  }
-  for (const auto & diagnostic : responderReliabilityDiagnostics_) {
-    report += diagnostic->getReport();
-  }
-  return report;
+  return initiatorReliabilityDiagnostics_[initiatorIndex]->getReport();
 }
+
+//-----------------------------------------------------------------------------
+DiagnosticReport RTLSTransceiversDiagnostics::getResponderReport(const size_t & responderIndex)
+const
+{
+  return responderReliabilityDiagnostics_[responderIndex]->getReport();
+}
+
 
 }  // namespace romea

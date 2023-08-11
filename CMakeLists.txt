@@ -11,13 +11,15 @@ find_package(romea_core_common REQUIRED)
 find_package(romea_core_rtls_transceiver REQUIRED)
 
 add_library(${PROJECT_NAME} SHARED
-  src/RTLSSimpleCoordinator.cpp
-  src/RTLSSimpleCoordinatorPoller.cpp
-  src/RTLSGeoreferencedCoordinator.cpp
-  src/RTLSGeoreferencedCoordinatorPoller.cpp
-  src/RTLSTransceiversDiagnostics.cpp
-  src/RTLSTransceiversPairIDsMapping.cpp
-  )
+  src/coordination/RTLSSimpleCoordinatorScheduler.cpp
+  src/coordination/RTLSGeoreferencedCoordinatorScheduler.cpp
+  src/coordination/RTLSReachableTransceivers.cpp
+  src/coordination/RTLSTransceiversDiagnostics.cpp
+  src/trilateration/RTLSPose2DEstimator.cpp
+  src/trilateration/RTLSPosition2DEstimator.cpp
+  src/trilateration/RTLSSimpleTrilateration2D.cpp
+  src/serialization/Pose2DSerialization.cpp
+  src/serialization/Twist2DSerialization.cpp)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -74,7 +76,7 @@ set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/LICENSE")
 
 option(BUILD_TESTING "BUILD WITH TESTS" ON)
 
-# if(BUILD_TESTING)
-#   enable_testing()
-#   add_subdirectory(test)
-# endif()
+if(BUILD_TESTING)
+  enable_testing()
+  add_subdirectory(test)
+endif()

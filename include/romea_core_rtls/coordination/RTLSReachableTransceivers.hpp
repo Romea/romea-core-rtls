@@ -13,39 +13,35 @@
 // limitations under the License.
 
 
-#ifndef ROMEA_RTLS__COORDINATORS_RTLSSIMPLECOORDINATORPOLLER_HPP_
-#define ROMEA_RTLS__COORDINATORS_RTLSSIMPLECOORDINATORPOLLER_HPP_
-
+#ifndef ROMEA_CORE_COMMON__POINTSET__RTLSREACHABLETRANSCEIVERS_HPP_
+#define ROMEA_CORE_COMMON__POINTSET__RTLSREACHABLETRANSCEIVERS_HPP_
 
 // std
-#include <optional>
+#include <vector>
 
 // romea
-#include "romea_core_rtls/RTLSTransceiversPairIDs.hpp"
+#include "romea_core_common/pointset/KdTree.hpp"
 
 namespace romea
 {
 
-class RTLSSimpleCoordinatorPoller
+class RTLSReachableTransceivers
 {
 public:
-  RTLSSimpleCoordinatorPoller();
+  RTLSReachableTransceivers(
+    const VectorOfEigenVector3d & points,
+    const double & researchRadius);
 
-  void setNumberOfInitiators(const size_t & numberOfInitiators);
-
-  void setNumberOfResponders(const size_t & numberOfInitiators);
-
-  virtual RTLSTransceiversPairIDs poll();
-
-  virtual void reset();
+  const std::vector<size_t> & find(const Eigen::Vector3d & position);
 
 private:
-  size_t initiatorPollIndex_;
-  size_t numberOfInitators_;
-  size_t responderPollIndex_;
-  size_t numberOfResponders_;
+  double squaredResearchRadius_;
+  VectorOfEigenVector3d points_;
+  KdTree<Eigen::Vector3d> kdTree_;
+  std::vector<size_t> neighborIndexes_;
+  std::vector<double> neighborSquareDistances_;
 };
 
-}  // namespace romea
+}   // namespace romea
 
-#endif   // ROMEA_RTLS__COORDINATORS_RTLSCOORDINATORPOLLER_HPP_
+#endif  // ROMEA_CORE_COMMON__POINTSET__NEAREST_POINTS_HPP_

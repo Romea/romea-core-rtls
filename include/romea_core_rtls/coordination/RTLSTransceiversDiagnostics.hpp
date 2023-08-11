@@ -25,8 +25,7 @@
 #include "romea_core_common/monitoring/OnlineAverage.hpp"
 #include "romea_core_common/monitoring/RateMonitoring.hpp"
 #include "romea_core_common/diagnostic/CheckupReliability.hpp"
-#include "romea_core_rtls/RTLSTransceiversPairIDs.hpp"
-#include "romea_core_rtls_transceiver/RTLSTransceiverRangingStatus.hpp"
+#include "romea_core_rtls_transceiver/RTLSTransceiverRangingResult.hpp"
 
 namespace romea
 {
@@ -34,29 +33,37 @@ namespace romea
 class RTLSTransceiversDiagnostics
 {
 public:
-  explicit RTLSTransceiversDiagnostics(const double & pollRate);
-
-  void setRespondersNames(const std::vector<std::string> & respondersNames);
-
-  void setInitiatorsNames(const std::vector<std::string> & initiatorsNames);
+  RTLSTransceiversDiagnostics(
+    const double & pollRate,
+    const std::vector<std::string> & initiatorsNames,
+    const std::vector<std::string> & respondersNames);
 
   void update(
-    const RTLSTransceiversPairIDs & transceiverIds,
-    const RTLSTransceiverRangingStatus & status);
+    const size_t & initiatorsPollIndex,
+    const size_t & respondersPollIndex,
+    const RTLSTransceiverRangingResult & rangingResult);
 
-  DiagnosticReport makeReport()const;
+  DiagnosticReport getInitiatorReport(const size_t & initiatorIndex) const;
+  DiagnosticReport getResponderReport(const size_t & responderIndex) const;
 
 private:
+  void initInitiatorsDiagnostics_(
+    const double & pollRate,
+    const std::vector<std::string> & initiatorsNames);
+
+  void initRespondersDiagnostics_(
+    const double & pollRate,
+    const std::vector<std::string> & respondersNames);
+
   void updateInitiatorReliability_(
     const double & reliability,
-    const size_t & initiator_index);
+    const size_t & initiatorIndex);
 
   void updateResponderReliability_(
     const double & reliability,
-    const size_t & responder_index);
+    const size_t & responderIndex);
 
 private:
-  double pollRate_;
   std::vector<std::unique_ptr<OnlineAverage>> responderReliabilityMonitorings_;
   std::vector<std::unique_ptr<CheckupReliability>> responderReliabilityDiagnostics_;
   std::vector<std::unique_ptr<OnlineAverage>> initiatorReliabilityMonitorings_;
