@@ -32,6 +32,8 @@ const size_t MINIMAL_NUMBER_OF_RANGES_FROM_EACH_TAG_TO_COMPUTE_POSE = 2;
 
 namespace romea
 {
+namespace core
+{
 
 //-----------------------------------------------------------------------------
 RTLSPose2DEstimator::RTLSPose2DEstimator(
@@ -249,4 +251,5 @@ void RTLSPose2DEstimator::computeJacobianAndY_()
 //  std::cout << Y << std::endl;
 }
 
+}  // namespace core
 }  // namespace romea

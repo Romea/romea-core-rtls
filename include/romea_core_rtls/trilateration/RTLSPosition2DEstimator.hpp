@@ -25,6 +25,8 @@
 
 namespace romea
 {
+namespace core
+{
 
 class RTLSPosition2DEstimator : public NLSE<double>
 {
@@ -49,6 +51,7 @@ private:
   std::vector<double> ranges_;
 };
 
+}  // namespace core
 }  // namespace romea
 
 #endif  // ROMEA_CORE_RTLS__RTLSPOSITION2DESTIMATOR_HPP_

@@ -24,6 +24,8 @@
 
 namespace romea
 {
+namespace core
+{
 
 //-----------------------------------------------------------------------------
 void serializeCartesianCoordinate(const double & value, unsigned char * buffer)
@@ -159,5 +161,5 @@ Pose2D deserializePose2D(const std::vector<uint8_t> & buffer)
   return pose;
 }
 
-
+}  // namespace core
 }  // namespace romea

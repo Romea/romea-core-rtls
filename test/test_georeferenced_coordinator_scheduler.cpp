@@ -38,13 +38,13 @@ protected:
   {
     std::vector<std::string> initiatorsNames{"initiator0", "initiator1"};
 
-    romea::VectorOfEigenVector3d initiatorsPositions = {
+    romea::core::VectorOfEigenVector3d initiatorsPositions = {
       Eigen::Vector3d(1.0, 0.5, 2.0),
       Eigen::Vector3d(-1.0, -0.5, 2.0)};
 
     std::vector<std::string> respondersNames({"responder0", "responder1", "responder2"});
 
-    romea::VectorOfEigenVector3d respondersPositions = {
+    romea::core::VectorOfEigenVector3d respondersPositions = {
       Eigen::Vector3d(-10.0, 0.0, 2.0),
       Eigen::Vector3d(0.0, 0.0, 2.0),
       Eigen::Vector3d(10.0, 0.0, 2.0)
@@ -53,21 +53,21 @@ protected:
     auto callback = [this](
       const size_t & initiatorIndex,
       const size_t & responderIndex,
-      const romea::Duration & /*timeout*/)
+      const romea::core::Duration & /*timeout*/)
       {
         initiatorsIndexes_.push_back(initiatorIndex);
         respondersIndexes_.push_back(responderIndex);
-        return romea::RTLSTransceiverRangingResult();
+        return romea::core::RTLSTransceiverRangingResult();
       };
 
-    scheduler_ = std::make_unique<romea::RTLSGeoreferencedCoordinatorScheduler>(
+    scheduler_ = std::make_unique<romea::core::RTLSGeoreferencedCoordinatorScheduler>(
       pollRate, maximalResearchDistance,
       initiatorsNames, initiatorsPositions,
       respondersNames, respondersPositions,
       callback);
   }
 
-  std::unique_ptr<romea::RTLSGeoreferencedCoordinatorScheduler> scheduler_;
+  std::unique_ptr<romea::core::RTLSGeoreferencedCoordinatorScheduler> scheduler_;
   std::vector<size_t> initiatorsIndexes_;
   std::vector<size_t> respondersIndexes_;
 };
@@ -78,7 +78,7 @@ TEST_F(TestGeoreferencedCoordinatorScheduler, checkPollWhenNoPositionIsGiven)
   init(30, 20);
 
   scheduler_->start();
-  std::this_thread::sleep_for(romea::durationFromSecond(2));
+  std::this_thread::sleep_for(romea::core::durationFromSecond(2));
   scheduler_->stop();
 
   EXPECT_EQ(initiatorsIndexes_[6], 0);
@@ -103,9 +103,9 @@ TEST_F(TestGeoreferencedCoordinatorScheduler, checkPollWhenAllRespondersAreVisib
 {
   init(30, 20);
   scheduler_->start();
-  std::this_thread::sleep_for(romea::durationFromMilliSecond(100));
+  std::this_thread::sleep_for(romea::core::durationFromMilliSecond(100));
   scheduler_->updateRobotPosition(Eigen::Vector3d::Zero());
-  std::this_thread::sleep_for(romea::durationFromMilliSecond(1900));
+  std::this_thread::sleep_for(romea::core::durationFromMilliSecond(1900));
   scheduler_->stop();
 
   EXPECT_EQ(initiatorsIndexes_[6], 0);
@@ -130,9 +130,9 @@ TEST_F(TestGeoreferencedCoordinatorScheduler, checkPollWhenTwoRespondersAreVisib
 {
   init(30, 20);
   scheduler_->start();
-  std::this_thread::sleep_for(romea::durationFromMilliSecond(100));
+  std::this_thread::sleep_for(romea::core::durationFromMilliSecond(100));
   scheduler_->updateRobotPosition(Eigen::Vector3d(13, 0, 0));
-  std::this_thread::sleep_for(romea::durationFromMilliSecond(1900));
+  std::this_thread::sleep_for(romea::core::durationFromMilliSecond(1900));
   scheduler_->stop();
 
 
@@ -170,9 +170,9 @@ TEST_F(TestGeoreferencedCoordinatorScheduler, checkPollWhenOnlyOneResponderIsVis
 {
   init(30, 20);
   scheduler_->start();
-  std::this_thread::sleep_for(romea::durationFromMilliSecond(100));
+  std::this_thread::sleep_for(romea::core::durationFromMilliSecond(100));
   scheduler_->updateRobotPosition(Eigen::Vector3d(23, 0, 0));
-  std::this_thread::sleep_for(romea::durationFromMilliSecond(1900));
+  std::this_thread::sleep_for(romea::core::durationFromMilliSecond(1900));
   scheduler_->stop();
 
 

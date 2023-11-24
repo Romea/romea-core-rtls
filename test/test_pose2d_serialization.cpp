@@ -26,8 +26,8 @@ void checkCartesianCoordinateSerialization(const double & value)
 {
   double deserializedValue;
   std::vector<unsigned char> buffer(4);
-  romea::serializeCartesianCoordinate(value, buffer.data());
-  romea::deserializeCartesianCoordinate(buffer.data(), deserializedValue);
+  romea::core::serializeCartesianCoordinate(value, buffer.data());
+  romea::core::deserializeCartesianCoordinate(buffer.data(), deserializedValue);
   EXPECT_NEAR(value, deserializedValue, 0.001);
 }
 
@@ -35,17 +35,18 @@ void checkOrientationSerialization(const double & value)
 {
   double deserializedValue;
   std::vector<unsigned char> buffer(2);
-  romea::serialiazeOrientation(value, buffer.data());
-  romea::deserializeOrientation(buffer.data(), deserializedValue);
-  EXPECT_LE(std::abs(romea::betweenMinusPiAndPi(deserializedValue - value)), 0.01 * M_PI / 180.);
+  romea::core::serialiazeOrientation(value, buffer.data());
+  romea::core::deserializeOrientation(buffer.data(), deserializedValue);
+  EXPECT_LE(
+    std::abs(romea::core::betweenMinusPiAndPi(deserializedValue - value)), 0.01 * M_PI / 180.);
 }
 
 void checkPositionCovarianceSerialization(const Eigen::Matrix2d & covariance)
 {
   std::vector<unsigned char> buffer(1);
   Eigen::Matrix2d deserializePositionCovariance;
-  romea::serializePositionCovariance(covariance, buffer.data());
-  romea::deserializePositionCovariance(buffer.data(), deserializePositionCovariance);
+  romea::core::serializePositionCovariance(covariance, buffer.data());
+  romea::core::deserializePositionCovariance(buffer.data(), deserializePositionCovariance);
   auto maxStd = std::max(std::sqrt(covariance(0, 0)), std::sqrt(covariance(1, 1)));
   EXPECT_NEAR(std::sqrt(deserializePositionCovariance(0, 0)), maxStd, 0.01);
   EXPECT_NEAR(std::sqrt(deserializePositionCovariance(1, 1)), maxStd, 0.01);
@@ -57,9 +58,10 @@ void checkOrientationVarianceSerialization(const double & value)
 {
   double deserializedValue;
   std::vector<unsigned char> buffer(1);
-  romea::serializeOrientationVariance(value, buffer.data());
-  romea::deserializeOrientationVariance(buffer.data(), deserializedValue);
-  EXPECT_LE(std::abs(romea::betweenMinusPiAndPi(deserializedValue - value)), 0.1 * M_PI / 180.);
+  romea::core::serializeOrientationVariance(value, buffer.data());
+  romea::core::deserializeOrientationVariance(buffer.data(), deserializedValue);
+  EXPECT_LE(
+    std::abs(romea::core::betweenMinusPiAndPi(deserializedValue - value)), 0.1 * M_PI / 180.);
 }
 
 //-----------------------------------------------------------------------------
@@ -77,8 +79,8 @@ TEST(TestSerialization, testCartesianPositionSerialization)
 {
   std::vector<unsigned char> buffer(8);
   Eigen::Vector2d deserializeCartesianPosition;
-  romea::serializeCartesianPosition(Eigen::Vector2d(-100.2937, 320.4873), buffer.data());
-  romea::deserializeCartesianPosition(buffer.data(), deserializeCartesianPosition);
+  romea::core::serializeCartesianPosition(Eigen::Vector2d(-100.2937, 320.4873), buffer.data());
+  romea::core::deserializeCartesianPosition(buffer.data(), deserializeCartesianPosition);
   EXPECT_NEAR(deserializeCartesianPosition.x(), -100.2937, 0.001);
   EXPECT_NEAR(deserializeCartesianPosition.y(), 320.4873, 0.001);
 }
@@ -118,7 +120,7 @@ TEST(TestSerialization, testOrientationViaranceSerialization)
 //-----------------------------------------------------------------------------
 TEST(TestSerialization, testPose2DSerialization)
 {
-  romea::Pose2D pose;
+  romea::core::Pose2D pose;
   pose.position.x() = 103.04892;
   pose.position.y() = -35.83893;
   pose.yaw = 190.098 * M_PI / 180.;
@@ -126,8 +128,8 @@ TEST(TestSerialization, testPose2DSerialization)
   pose.covariance.row(1) << 0.00273, 0.1435, -0.02593;
   pose.covariance.row(2) << 0.0064765, 0.02593, 0.033;
 
-  auto buffer = romea::serializePose2D(pose);
-  pose = romea::deserializePose2D(buffer);
+  auto buffer = romea::core::serializePose2D(pose);
+  pose = romea::core::deserializePose2D(buffer);
 
   EXPECT_NEAR(pose.position.x(), 103.04892, 0.001);
   EXPECT_NEAR(pose.position.y(), -35.83893, 0.001);

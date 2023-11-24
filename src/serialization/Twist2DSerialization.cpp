@@ -21,6 +21,8 @@
 
 namespace romea
 {
+namespace core
+{
 
 //-----------------------------------------------------------------------------
 void serializeLinearSpeed(const double & value, unsigned char * buffer)
@@ -151,4 +153,5 @@ Twist2D deserializeTwist2D(const std::vector<unsigned char> & buffer)
   return twist;
 }
 
+}  // namespace core
 }  // namespace romea

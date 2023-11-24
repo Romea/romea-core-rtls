@@ -29,6 +29,8 @@
 
 namespace romea
 {
+namespace core
+{
 
 class RTLSSimpleCoordinatorScheduler
 {
@@ -78,6 +80,7 @@ protected:
   RTLSTransceiversDiagnostics diagnostics_;
 };
 
+}  // namespace core
 }  // namespace romea
 
 #endif   // ROMEA_RTLS__COORDINATORS_RTLSSIMPLECOORDINATOR_HPP_

@@ -29,6 +29,8 @@
 
 namespace romea
 {
+namespace core
+{
 
 class RTLSTransceiversDiagnostics
 {
@@ -70,6 +72,7 @@ private:
   std::vector<std::unique_ptr<CheckupReliability>> initiatorReliabilityDiagnostics_;
 };
 
+}  // namespace core
 }  // namespace romea
 
 #endif  // ROMEA_RTLS__COORDINATORS__RTLSCOORDINATORDIAGNOSTICS_HPP_

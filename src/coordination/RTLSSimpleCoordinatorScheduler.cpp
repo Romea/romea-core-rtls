@@ -23,6 +23,8 @@
 
 namespace romea
 {
+namespace core
+{
 
 //-----------------------------------------------------------------------------
 RTLSSimpleCoordinatorScheduler::RTLSSimpleCoordinatorScheduler(
@@ -99,4 +101,5 @@ DiagnosticReport RTLSSimpleCoordinatorScheduler::getReport()
   return report;
 }
 
+}  // namespace core
 }  // namespace romea

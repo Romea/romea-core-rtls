@@ -28,7 +28,7 @@ TEST(TestRobotToHuman, testTrilateration2D2A)
 {
   Eigen::Vector2d tagPosition(5, 2);
 
-  romea::VectorOfEigenVector2d anchorPositions(2);
+  romea::core::VectorOfEigenVector2d anchorPositions(2);
   anchorPositions[0] = Eigen::Vector2d(0, 0.3);
   anchorPositions[1] = Eigen::Vector2d(0, -0.3);
 
@@ -37,7 +37,7 @@ TEST(TestRobotToHuman, testTrilateration2D2A)
   ranges[1] = (tagPosition - anchorPositions[1]).norm();
 
   Eigen::Vector2d tagEstimatedPosition =
-    romea::SimpleTrilateration2D::compute(anchorPositions, ranges);
+    romea::core::SimpleTrilateration2D::compute(anchorPositions, ranges);
   EXPECT_NEAR(tagPosition.x(), tagEstimatedPosition.x(), 0.001);
   EXPECT_NEAR(tagPosition.y(), tagEstimatedPosition.y(), 0.001);
 }
@@ -48,7 +48,7 @@ TEST(TestRobotToHuman, testTrilateration2D3AUp)
 {
   Eigen::Vector2d tagPosition = Eigen::Vector2d(6, -3);
 
-  romea::VectorOfEigenVector2d anchorPositions(3);
+  romea::core::VectorOfEigenVector2d anchorPositions(3);
   anchorPositions[0] = Eigen::Vector2d(0, 0.6);
   anchorPositions[1] = Eigen::Vector2d(0, -0.6);
   anchorPositions[2] = Eigen::Vector2d(1, 0);
@@ -59,7 +59,7 @@ TEST(TestRobotToHuman, testTrilateration2D3AUp)
   ranges[2] = (tagPosition - anchorPositions[2]).norm();
 
   Eigen::Vector2d tagEstimatedPosition =
-    romea::SimpleTrilateration2D::compute(anchorPositions, ranges);
+    romea::core::SimpleTrilateration2D::compute(anchorPositions, ranges);
 
   EXPECT_NEAR(tagPosition.x(), tagEstimatedPosition.x(), 0.001);
   EXPECT_NEAR(tagPosition.y(), tagEstimatedPosition.y(), 0.001);
@@ -71,7 +71,7 @@ TEST(TestRobotToHuman, testTrilateration2D3ADown)
 {
   Eigen::Vector2d tagPosition = Eigen::Vector2d(6, -3);
 
-  romea::VectorOfEigenVector2d anchorPositions(3);
+  romea::core::VectorOfEigenVector2d anchorPositions(3);
   anchorPositions[0] = Eigen::Vector2d(0, 0.7),
   anchorPositions[1] = Eigen::Vector2d(0, -0.5),
   anchorPositions[2] = Eigen::Vector2d(-0.7, 0);
@@ -82,7 +82,7 @@ TEST(TestRobotToHuman, testTrilateration2D3ADown)
   ranges[2] = (tagPosition - anchorPositions[2]).norm();
 
   Eigen::Vector2d tagEstimatedPosition =
-    romea::SimpleTrilateration2D::compute(anchorPositions, ranges);
+    romea::core::SimpleTrilateration2D::compute(anchorPositions, ranges);
 
   EXPECT_NEAR(tagPosition.x(), tagEstimatedPosition.x(), 0.001);
   EXPECT_NEAR(tagPosition.y(), tagEstimatedPosition.y(), 0.001);

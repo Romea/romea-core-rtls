@@ -29,7 +29,7 @@ TEST(TestRtlsPositionEstimator, testPositionEstimatorWithTwoAnchors)
   double r00 = (tag0Position - anchor0Position).head<2>().norm();
   double r01 = (tag0Position - anchor1Position).head<2>().norm();
 
-  romea::RTLSPosition2DEstimator estimator(
+  romea::core::RTLSPosition2DEstimator estimator(
     {anchor0Position, anchor1Position}, 0.001);
   EXPECT_TRUE(estimator.init({r00, r01}));
   EXPECT_TRUE(estimator.estimate(20, 0.02));
@@ -52,7 +52,7 @@ TEST(TestRtlsPositionEstimator, testPositionEstimatorWithThreeAnchorsUp)
   double r02 = (tag0Position - anchor2Position).head<2>().norm();
 
 
-  romea::RTLSPosition2DEstimator estimator(
+  romea::core::RTLSPosition2DEstimator estimator(
     {anchor0Position, anchor1Position, anchor2Position}, 0.001);
 
   EXPECT_TRUE(estimator.init({r00, r01, r02}));
@@ -74,7 +74,7 @@ TEST(TestRtlsPositionEstimator, testPositionEstimatorWithThreeAnchorsDown)
   double r01 = (tag0Position - anchor1Position).head<2>().norm();
   double r02 = (tag0Position - anchor2Position).head<2>().norm();
 
-  romea::RTLSPosition2DEstimator estimator(
+  romea::core::RTLSPosition2DEstimator estimator(
     {anchor0Position, anchor1Position, anchor2Position}, 0.001);
   EXPECT_TRUE(estimator.init({r00, r01, r02}));
   EXPECT_TRUE(estimator.estimate(20, 0.02));

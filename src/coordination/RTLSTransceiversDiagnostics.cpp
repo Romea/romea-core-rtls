@@ -31,6 +31,8 @@ const double AVERAGE_MONITORING_PRECISION = 0.0001;
 
 namespace romea
 {
+namespace core
+{
 
 //-----------------------------------------------------------------------------
 RTLSTransceiversDiagnostics::RTLSTransceiversDiagnostics(
@@ -149,5 +151,5 @@ const
   return responderReliabilityDiagnostics_[responderIndex]->getReport();
 }
 
-
+}  // namespace core
 }  // namespace romea

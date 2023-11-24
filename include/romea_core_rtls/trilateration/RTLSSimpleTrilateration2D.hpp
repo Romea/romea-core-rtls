@@ -23,6 +23,8 @@
 
 namespace romea
 {
+namespace core
+{
 
 
 class SimpleTrilateration2D
@@ -58,6 +60,7 @@ private:
     const double & r2);
 };
 
+}  // namespace core
 }  // namespace romea
 
 #endif  // ROMEA_CORE_LOCALISATION_RTLS__RTLS_LOCALISATION_SIMPLE_TRILATERATION_HPP_

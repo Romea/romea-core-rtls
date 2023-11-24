@@ -34,6 +34,8 @@
 
 namespace romea
 {
+namespace core
+{
 
 class RTLSGeoreferencedCoordinatorScheduler : public RTLSSimpleCoordinatorScheduler
 {
@@ -69,6 +71,7 @@ private:
   size_t selectedRespondersPollIndex_;
 };
 
+}  // namespace core
 }  // namespace romea
 
 #endif   // ROMEA_RTLS__COORDINATORS_RTLSGEOREFERENCEDCOORDINATOR_HPP_

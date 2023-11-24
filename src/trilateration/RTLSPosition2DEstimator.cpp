@@ -22,6 +22,8 @@ const size_t MINIMAL_NUMBER_OF_RANGES_TO_COMPUTE_POSITION = 2;
 
 namespace romea
 {
+namespace core
+{
 
 
 //-----------------------------------------------------------------------------
@@ -131,4 +133,5 @@ void RTLSPosition2DEstimator::computeJacobianAndY_()
   }
 }
 
+}  // namespace core
 }  // namespace romea

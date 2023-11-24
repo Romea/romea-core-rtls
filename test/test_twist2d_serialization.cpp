@@ -25,8 +25,8 @@ void checkLinearSpeedSerialization(const double & value)
 {
   double deserializedValue;
   std::vector<unsigned char> buffer(2);
-  romea::serializeLinearSpeed(value, buffer.data());
-  romea::deserializeLinearSpeed(buffer.data(), deserializedValue);
+  romea::core::serializeLinearSpeed(value, buffer.data());
+  romea::core::deserializeLinearSpeed(buffer.data(), deserializedValue);
   EXPECT_NEAR(value, deserializedValue, 0.001);
 }
 
@@ -34,8 +34,8 @@ void checkAngularSpeedSerialization(const double & value)
 {
   double deserializedValue;
   std::vector<unsigned char> buffer(2);
-  romea::serializeAngularSpeed(value, buffer.data());
-  romea::deserializeAngularSpeed(buffer.data(), deserializedValue);
+  romea::core::serializeAngularSpeed(value, buffer.data());
+  romea::core::deserializeAngularSpeed(buffer.data(), deserializedValue);
   EXPECT_NEAR(deserializedValue, value, 0.01 * M_PI / 180.);
 }
 
@@ -43,8 +43,8 @@ void checkLinearSpeedsCovarianceSerialization(const Eigen::Matrix2d & covariance
 {
   std::vector<unsigned char> buffer(1);
   Eigen::Matrix2d deserializeLinearSpeedsCovariance;
-  romea::serializeLinearSpeedsCovariance(covariance, buffer.data());
-  romea::deserializeLinearSpeedsCovariance(buffer.data(), deserializeLinearSpeedsCovariance);
+  romea::core::serializeLinearSpeedsCovariance(covariance, buffer.data());
+  romea::core::deserializeLinearSpeedsCovariance(buffer.data(), deserializeLinearSpeedsCovariance);
   EXPECT_NEAR(std::sqrt(deserializeLinearSpeedsCovariance(0, 0)), sqrt(covariance(0, 0)), 0.01);
   EXPECT_NEAR(std::sqrt(deserializeLinearSpeedsCovariance(1, 1)), sqrt(covariance(1, 1)), 0.01);
   EXPECT_DOUBLE_EQ(deserializeLinearSpeedsCovariance(0, 1), 0);
@@ -55,8 +55,8 @@ void checkAngularSpeedVarianceSerialization(const double & value)
 {
   double deserializedValue;
   std::vector<unsigned char> buffer(1);
-  romea::serializeAngularSpeedVariance(value, buffer.data());
-  romea::deserializeAngularSpeedVariance(buffer.data(), deserializedValue);
+  romea::core::serializeAngularSpeedVariance(value, buffer.data());
+  romea::core::deserializeAngularSpeedVariance(buffer.data(), deserializedValue);
   EXPECT_NEAR(deserializedValue, value, 0.1 * M_PI / 180.);
 }
 
@@ -75,8 +75,8 @@ TEST(TestSerialization, testLinearSpeedsSerialization)
 {
   std::vector<unsigned char> buffer(8);
   Eigen::Vector2d deserializeLinearSpeeds;
-  romea::serializeLinearSpeeds(Eigen::Vector2d(-10.2937, 3.2048), buffer.data());
-  romea::deserializeLinearSpeeds(buffer.data(), deserializeLinearSpeeds);
+  romea::core::serializeLinearSpeeds(Eigen::Vector2d(-10.2937, 3.2048), buffer.data());
+  romea::core::deserializeLinearSpeeds(buffer.data(), deserializeLinearSpeeds);
   EXPECT_NEAR(deserializeLinearSpeeds.x(), -10.2937, 0.001);
   EXPECT_NEAR(deserializeLinearSpeeds.y(), 3.2048, 0.001);
 }
@@ -119,7 +119,7 @@ TEST(TestSerialization, testAngularSpeedViaranceSerialization)
 //-----------------------------------------------------------------------------
 TEST(TestSerialization, testTwist2DSerialization)
 {
-  romea::Twist2D twist;
+  romea::core::Twist2D twist;
   twist.linearSpeeds.x() = 10.304892;
   twist.linearSpeeds.y() = -3.583893;
   twist.angularSpeed = 20.098 * M_PI / 180.;
@@ -127,8 +127,8 @@ TEST(TestSerialization, testTwist2DSerialization)
   twist.covariance.row(1) << 0.00273, 0.1435, -0.02593;
   twist.covariance.row(2) << 0.0064765, 0.02593, 0.033;
 
-  auto buffer = romea::serializeTwist2D(twist);
-  twist = romea::deserializeTwist2D(buffer);
+  auto buffer = romea::core::serializeTwist2D(twist);
+  twist = romea::core::deserializeTwist2D(buffer);
 
   EXPECT_NEAR(twist.linearSpeeds.x(), 10.304892, 0.001);
   EXPECT_NEAR(twist.linearSpeeds.y(), -3.583893, 0.001);

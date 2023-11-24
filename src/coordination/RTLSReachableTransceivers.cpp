@@ -17,6 +17,8 @@
 
 namespace romea
 {
+namespace core
+{
 
 //-----------------------------------------------------------------------------
 RTLSReachableTransceivers::RTLSReachableTransceivers(
@@ -40,4 +42,5 @@ const std::vector<size_t> & RTLSReachableTransceivers::find(const Eigen::Vector3
   return neighborIndexes_;
 }
 
+}   // namespace core
 }   // namespace romea

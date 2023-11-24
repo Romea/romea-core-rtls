@@ -26,7 +26,7 @@ namespace
 
 double researchRadius(
   const double & maximalResearchDistance,
-  const romea::VectorOfEigenVector3d & initiatorsPositions)
+  const romea::core::VectorOfEigenVector3d & initiatorsPositions)
 {
   double radius = 0;
   for (const auto & initiatorPosition : initiatorsPositions) {
@@ -39,6 +39,8 @@ double researchRadius(
 }  // namespace
 
 namespace romea
+{
+namespace core
 {
 
 //-----------------------------------------------------------------------------
@@ -140,4 +142,5 @@ DiagnosticReport RTLSGeoreferencedCoordinatorScheduler::getReport()
   return report;
 }
 
+}  // namespace core
 }  // namespace romea

@@ -40,18 +40,18 @@ protected:
     auto callback = [this](
       const size_t & initiatorIndex,
       const size_t & responderIndex,
-      const romea::Duration & /*timeout*/)
+      const romea::core::Duration & /*timeout*/)
       {
         initiatorsIndexes_.push_back(initiatorIndex);
         respondersIndexes_.push_back(responderIndex);
-        return romea::RTLSTransceiverRangingResult();
+        return romea::core::RTLSTransceiverRangingResult();
       };
 
-    scheduler_ = std::make_unique<romea::RTLSSimpleCoordinatorScheduler>(
+    scheduler_ = std::make_unique<romea::core::RTLSSimpleCoordinatorScheduler>(
       pollRate, initiatorsNames, respondersNames, callback);
   }
 
-  std::unique_ptr<romea::RTLSSimpleCoordinatorScheduler> scheduler_;
+  std::unique_ptr<romea::core::RTLSSimpleCoordinatorScheduler> scheduler_;
   std::vector<size_t> initiatorsIndexes_;
   std::vector<size_t> respondersIndexes_;
 };
@@ -62,7 +62,7 @@ TEST_F(TestSimpleCoordinatorScheduler, checkPollWhenOneResponderIsUsed)
   init(20.0, {"initiator0", "initiator1"}, {"responder0"});
 
   scheduler_->start();
-  std::this_thread::sleep_for(romea::durationFromSecond(1));
+  std::this_thread::sleep_for(romea::core::durationFromSecond(1));
   scheduler_->stop();
 
   EXPECT_EQ(initiatorsIndexes_[0], 0);
@@ -85,7 +85,7 @@ TEST_F(TestSimpleCoordinatorScheduler, checkPollWhenTwoRespondersIsUsed)
   init(20.0, {"initiator0", "initiator1"}, {"responder0", "responder1"});
 
   scheduler_->start();
-  std::this_thread::sleep_for(romea::durationFromSecond(1));
+  std::this_thread::sleep_for(romea::core::durationFromSecond(1));
   scheduler_->stop();
 
   EXPECT_EQ(initiatorsIndexes_[0], 0);

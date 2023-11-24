@@ -22,6 +22,8 @@
 
 namespace romea
 {
+namespace core
+{
 
 //-----------------------------------------------------------------------------
 VectorOfEigenVector2d SimpleTrilateration2D::compute_(
@@ -163,4 +165,5 @@ Eigen::Vector2d SimpleTrilateration2D::compute(
   }
 }
 
+}  // namespace core
 }  // namespace romea

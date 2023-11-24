@@ -28,6 +28,8 @@
 
 namespace romea
 {
+namespace core
+{
 
 void serializeCartesianCoordinate(const double & value, unsigned char * buffer);
 void deserializeCartesianCoordinate(const unsigned char * buffer, double & value);
@@ -63,6 +65,7 @@ std::vector<unsigned char> serializePose2D(const Pose2D & pose);
 Pose2D deserializePose2D(const std::vector<unsigned char> & buffer);
 
 
+}  // namespace core
 }  // namespace romea
 
 #endif  // ROMEA_CORE_RTLS__SERIALIZATION__POSE2DSERIALIZATION_HPP_

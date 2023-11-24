@@ -24,6 +24,8 @@
 
 namespace romea
 {
+namespace core
+{
 
 class RTLSReachableTransceivers
 {
@@ -42,6 +44,7 @@ private:
   std::vector<double> neighborSquareDistances_;
 };
 
+}   // namespace core
 }   // namespace romea
 
 #endif  // ROMEA_CORE_COMMON__POINTSET__NEAREST_POINTS_HPP_
