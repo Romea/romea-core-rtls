@@ -16,6 +16,7 @@
 // std
 #include <algorithm>
 #include <exception>
+#include <vector>
 
 // romea
 #include "romea_core_common/math/EulerAngles.hpp"

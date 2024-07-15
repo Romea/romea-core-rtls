@@ -14,6 +14,7 @@
 
 // std
 #include <cmath>
+#include <vector>
 
 // gtest
 #include "gtest/gtest.h"
@@ -89,7 +90,6 @@ TEST(TestSerialization, testOrientationSerialization)
   checkAngularSpeedSerialization(-0.3475);
   checkAngularSpeedSerialization(1.3895);
   EXPECT_ANY_THROW(checkAngularSpeedSerialization(M_PI + 0.1));
-
 }
 
 

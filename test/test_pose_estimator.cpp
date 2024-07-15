@@ -44,7 +44,6 @@ TEST(TestRtlsPoseEstimator, testRtlsPoseEstimator)
   double theta = 0;
   double course = -M_PI;
   for (; theta < 2 * M_PI; theta += M_PI / 4, course += M_PI / 3) {
-
     Eigen::Matrix3d R = romea::core::eulerAnglesToRotation3D(
       Eigen::Vector3d(0, 0, romea::core::between0And2Pi(course)));
     Eigen::Vector3d T(rho * std::cos(theta), rho * std::cos(theta), 0);

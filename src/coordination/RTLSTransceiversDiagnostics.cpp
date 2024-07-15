@@ -17,7 +17,6 @@
 #include <string>
 #include <utility>
 #include <vector>
-#include <string>
 
 // romea
 #include "romea_core_rtls/coordination/RTLSTransceiversDiagnostics.hpp"

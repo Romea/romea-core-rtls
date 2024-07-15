@@ -12,8 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// std
 #include <string>
 #include <vector>
+#include <memory>
 #include <map>
 
 // gtest

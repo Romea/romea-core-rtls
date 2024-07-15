@@ -13,6 +13,7 @@
 // limitations under the License.
 
 // std
+#include <algorithm>
 #include <vector>
 #include <string>
 #include <numeric>

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// std
+#include <memory>
 #include <string>
 #include <vector>
 #include <map>

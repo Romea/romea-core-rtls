@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef ROMEA_CORE_RTLS__RTLSPOSE2DESTIMATOR_HPP_
-#define ROMEA_CORE_RTLS__RTLSPOSE2DESTIMATOR_HPP_
+#ifndef ROMEA_CORE_RTLS__TRILATERATION__RTLSPOSE2DESTIMATOR_HPP_
+#define ROMEA_CORE_RTLS__TRILATERATION__RTLSPOSE2DESTIMATOR_HPP_
 
 // std
-#include <vector>
 #include <optional>
+#include <vector>
 
 // romea
 #include "romea_core_common/regression/leastsquares/NLSE.hpp"
@@ -57,4 +57,4 @@ private:
 }  // namespace core
 }  // namespace romea
 
-#endif  // ROMEA_CORE_RTLS__RTLSPOSE2DESTIMATOR_HPP_
+#endif  // ROMEA_CORE_RTLS__TRILATERATION__RTLSPOSE2DESTIMATOR_HPP_
