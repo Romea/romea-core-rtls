@@ -21,7 +21,7 @@ The library implements trilateration algorithms that estimate the **pose** or **
 2. cd worskpace
 3. mkdir src
 4. wget https://raw.githubusercontent.com/Romea/romea-core-rtls/refs/heads/main/romea_rtls_public.repos
-5. vcs import src < romea_imu_public.repos
+5. vcs import src < romea_rtls_public.repos
 6. build packages
    - catkin build for ROS1
    - colcon build for ROS2
