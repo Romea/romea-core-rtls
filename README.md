@@ -1,6 +1,6 @@
-# Romea Core RTLS Library
+# romea_core_rtls 
 
-The **Romea Core RTLS Library** offers a comprehensive set of tools to implement Real-Time Location Systems (RTLS) specifically designed for mobile robotics. The library provides several key features to enable efficient and accurate localization in robotics systems:
+This project is a C++ library that provides a comprehensive set of tools to implement Real-Time Location Systems (RTLS) specifically designed for mobile robotics. The library provides several key features to enable efficient and accurate localization in robotics systems:
 
 ## **RTLS Transmitter Coordination:**
 
@@ -46,8 +46,8 @@ This project is released under the Apache License 2.0. See the LICENSE file for 
 
 ## **Authors**
 
-The Romea Core RTLS library was developed by **Jean Laneurit** in the context of various research projects carried out at INRAE.
+The romea_core_rtls library was developed by **Jean Laneurit** in the context of various research projects carried out at INRAE.
 
 ## **Contact**
 
-If you have any questions or comments about Romea Core RTLS library, please contact **[Jean Laneurit](mailto:jean.laneurit@inrae.fr)** 
+If you have any questions or comments about romea_core_rtls library, please contact **[Jean Laneurit](mailto:jean.laneurit@inrae.fr)** 
