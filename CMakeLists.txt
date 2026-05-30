@@ -8,33 +8,35 @@ project(
   LANGUAGES CXX)
 
 find_package(romea_core_common REQUIRED)
-find_package(romea_core_rtls_transceiver REQUIRED)
 
 add_library(${PROJECT_NAME} SHARED
-  src/coordination/RTLSSimpleCoordinatorScheduler.cpp
-  src/coordination/RTLSGeoreferencedCoordinatorScheduler.cpp
-  src/coordination/RTLSReachableTransceivers.cpp
-  src/coordination/RTLSTransceiversDiagnostics.cpp
-  src/trilateration/RTLSPose2DEstimator.cpp
-  src/trilateration/RTLSPosition2DEstimator.cpp
-  src/trilateration/RTLSSimpleTrilateration2D.cpp
-  src/serialization/Pose2DSerialization.cpp
-  src/serialization/Twist2DSerialization.cpp)
+  src/diagnostics.cpp
+  src/transceiver.cpp
+  src/range/noise.cpp
+  src/range/random_noise.cpp
+  src/ranging/result.cpp
+  src/ranging/status.cpp
+  src/scheduling/round_robin_scheduler.cpp
+  src/scheduling/position_aware_scheduler.cpp
+  src/scheduling/nearby_transceiver_finder.cpp
+  src/serialization/pose2D.cpp
+  src/serialization/twist2D.cpp
+  src/trilateration/pose2D_estimator.cpp
+  src/trilateration/position2D_estimator.cpp
+  src/trilateration/simple_trilateration2D.cpp)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
 target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC
-  ${romea_core_common_INCLUDE_DIRS}
-  ${romea_core_rtls_transceiver_INCLUDE_DIRS})
+  ${romea_core_common_INCLUDE_DIRS})
 
 target_compile_options(${PROJECT_NAME} PRIVATE
   -Wall -Wextra -O3 -std=c++17)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
-  romea_core_common::romea_core_common
-  romea_core_rtls_transceiver::romea_core_rtls_transceiver)
+  romea_core_common::romea_core_common)
 
 include(GNUInstallDirs)
 

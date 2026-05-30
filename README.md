@@ -1,53 +1,103 @@
-# romea_core_rtls 
+# romea_core_rtls
 
-This project is a C++ library that provides a comprehensive set of tools to implement Real-Time Location Systems (RTLS) specifically designed for mobile robotics. The library provides several key features to enable efficient and accurate localization in robotics systems:
+## Overview
 
-## **RTLS Transmitter Coordination:**
+`romea_core_rtls` is a C++ library for coordinating RTLS ranging exchanges, serializing compact robot state data and estimating 2D positions or poses from range measurements.
 
-The library provides tools for coordinating a set of RTLS transmitters to establish **robot-to-robot**, **robot-to-human**, and **robot-to-world** localization systems. These tools enable the seamless synchronization and management of multiple transmitters, whether deployed in the environment or mounted on robots.
+It builds on `romea_core_rtls_transceiver`, which provides the low-level transceiver types and ranging-result containers.
 
-## **Serialization of Data:**
+The package is framework-independent C++ code. Middleware-specific drivers, messages and launch files are intentionally kept outside this library.
 
-The library includes functionality to serialize information such as **pose** (position and orientation) and **twist** (linear and angular velocities), which are essential for implementing **robot-to-robot** and **robot-to-human** localization systems. This data can be shared between robots, alongside the messages required for range estimation between transmitters.
+---
 
-## **Trilateration Algorithms:**
+## Main components
 
-The library implements trilateration algorithms that estimate the **pose** or **position** of a robot based on the configuration of RTLS transmitters, both those mounted on the robots and those distributed within the environment. These algorithms are key to deriving accurate localization information from distance measurements between the transmitters.
+| Component | Main classes | Role |
+| --------- | ------------ | ---- |
+| Coordination schedulers | `RTLSSimpleCoordinatorScheduler`, `RTLSGeoreferencedCoordinatorScheduler` | Schedule ranging requests between initiators and responders. |
+| Reachability selection | `RTLSReachableTransceivers` | Select responders that are reachable from a given position. |
+| Diagnostics | `RTLSTransceiversDiagnostics` | Monitor initiator and responder ranging reliability. |
+| Trilateration | `SimpleTrilateration2D`, `RTLSPosition2DEstimator`, `RTLSPose2DEstimator` | Estimate 2D position or pose from range measurements. |
+| Serialization | `Pose2DSerialization`, `Twist2DSerialization` | Encode compact pose and twist data into byte buffers. |
 
+---
 
-## **Usage**
+## Coordination algorithms
 
-1. create a ROS workspace
-2. cd worskpace
-3. mkdir src
-4. wget https://raw.githubusercontent.com/Romea/romea-core-rtls/refs/heads/main/romea_rtls_public.repos
-5. vcs import src < romea_rtls_public.repos
-6. build packages
-   - catkin build for ROS1
-   - colcon build for ROS2
-7. create your application using this library
+The coordination layer decides which transceivers should perform a ranging exchange.
 
-## **Contributing**
+| Scheduler | Behaviour |
+| --------- | --------- |
+| `RTLSSimpleCoordinatorScheduler` | Cycles through initiator/responder pairs at a configured polling rate and calls a user-provided ranging request callback. |
+| `RTLSGeoreferencedCoordinatorScheduler` | Extends the simple scheduler by selecting responders that are reachable from the current robot position. |
 
-If you'd like to contribute to this project, here are some guidelines:
+Ranging feedback is fed back to the scheduler with `feedback()`, then forwarded to `RTLSTransceiversDiagnostics` to update initiator and responder reliability.
 
-1. Fork the repository.
-2. Create a new branch for your changes.
-3. Make your changes.
-4. Write tests to cover your changes.
-5. Run the tests to ensure they pass.
-6. Commit your changes.
-7. Push your changes to your forked repository.
-8. Submit a pull request.
+---
 
-## **License**
+## Estimation algorithms
 
-This project is released under the Apache License 2.0. See the LICENSE file for details.
+The package provides three 2D estimation helpers:
 
-## **Authors**
+| Estimator | Input | Output |
+| --------- | ----- | ------ |
+| `SimpleTrilateration2D` | Reference tag positions and ranges. | Direct 2D position estimate from range-circle intersections. |
+| `RTLSPosition2DEstimator` | Reference tag positions and optional ranges. | 2D position estimate using nonlinear least squares. |
+| `RTLSPose2DEstimator` | Target tag positions, reference tag positions and optional range arrays. | 2D pose estimate using nonlinear least squares. |
 
-The romea_core_rtls library was developed by **Jean Laneurit** in the context of various research projects carried out at INRAE.
+The nonlinear estimators inherit from the least-squares tools provided by `romea_core_common`.
 
-## **Contact**
+---
 
-If you have any questions or comments about romea_core_rtls library, please contact **[Jean Laneurit](mailto:jean.laneurit@inrae.fr)** 
+## Serialization helpers
+
+RTLS exchanges can carry compact robot state information in addition to range measurements.
+
+| Serialization helpers | Data |
+| --------------------- | ---- |
+| `serializePose2D()` / `deserializePose2D()` | 2D position, orientation and covariance. |
+| `serialize_twist2D()` / `deserialize_twist2D()` | Linear speeds, angular speed and covariance. |
+
+Lower-level helpers are also available to encode individual coordinates, orientations, speeds and variances into byte buffers.
+
+---
+
+## Minimal usage
+
+```cpp
+#include <romea_core_rtls/trilateration/RTLSPosition2DEstimator.hpp>
+
+romea::core::VectorOfEigenVector3d reference_tag_positions;
+
+romea::core::RTLSPosition2DEstimator estimator(reference_tag_positions);
+
+romea::core::RTLSPosition2DEstimator::RangeVector ranges;
+ranges.emplace_back(2.4);
+ranges.emplace_back(3.1);
+ranges.emplace_back(std::nullopt);
+ranges.emplace_back(4.0);
+
+if (estimator.init(ranges)) {
+  estimator.estimate(maximal_number_of_iterations, convergence_threshold);
+  auto position = estimator.getEstimate();
+}
+```
+
+---
+
+## Related packages
+
+| Package | Role |
+| ------- | ---- |
+| `romea_core_common` | Shared core types used for time, diagnostics, monitoring, geometry and least-squares tools. |
+| `romea_core_rtls_transceiver` | RTLS transceiver identity, physical configuration, ranging result and noise models. |
+
+---
+
+## License
+
+This project is released under the Apache License 2.0. See the `LICENSE` file for details.
+
+## Authors
+
+This library was developed by **Jean Laneurit** in the context of several research projects carried out at INRAE.
