@@ -33,24 +33,24 @@ namespace core {
 
 //-----------------------------------------------------------------------------
 RTLSTransceiversDiagnostics::RTLSTransceiversDiagnostics(
-    const double& pollRate, const std::vector<std::string>& initiators_names,
+    const double& poll_rate, const std::vector<std::string>& initiators_names,
     const std::vector<std::string>& responders_names)
     : responder_reliability_monitorings_(),
       responder_reliability_diagnostics_(),
       initiator_reliability_monitorings_(),
       initiator_reliability_diagnostics_() {
-  init_initiators_diagnostics_(pollRate, initiators_names);
-  init_responders_diagnostics_(pollRate, responders_names);
+  init_initiators_diagnostics_(poll_rate, initiators_names);
+  init_responders_diagnostics_(poll_rate, responders_names);
 }
 
 //-----------------------------------------------------------------------------
 void RTLSTransceiversDiagnostics::init_responders_diagnostics_(
-    const double& pollRate, const std::vector<std::string>& responders_names) {
+    const double& poll_rate, const std::vector<std::string>& responders_names) {
   responder_reliability_monitorings_.clear();
   responder_reliability_diagnostics_.clear();
 
   size_t responder_monitorings_window_size =
-      2 * pollRate / responders_names.size();
+      2 * poll_rate / responders_names.size();
 
   for (const std::string& responderName : responders_names) {
     auto monitoring = std::make_unique<OnlineAverage>(
@@ -67,12 +67,12 @@ void RTLSTransceiversDiagnostics::init_responders_diagnostics_(
 
 //-----------------------------------------------------------------------------
 void RTLSTransceiversDiagnostics::init_initiators_diagnostics_(
-    const double& pollRate, const std::vector<std::string>& initiators_names) {
+    const double& poll_rate, const std::vector<std::string>& initiators_names) {
   initiator_reliability_monitorings_.clear();
   initiator_reliability_diagnostics_.clear();
 
   size_t initiator_monitorings_window_size =
-      2 * pollRate / initiators_names.size();
+      2 * poll_rate / initiators_names.size();
 
   for (const std::string& initiator_name : initiators_names) {
     auto monitoring = std::make_unique<OnlineAverage>(

@@ -52,9 +52,9 @@ class RTLSTransceiver {
   Function function_;
 };
 
-RTLSTransceiver::Function stringToFunction(const std::string& function);
+RTLSTransceiver::Function string_to_function(const std::string& function);
 
-std::string functionToString(const RTLSTransceiver::Function& function);
+std::string function_to_string(const RTLSTransceiver::Function& function);
 
 bool operator==(const RTLSTransceiver::EUID& euid1,
                 const RTLSTransceiver::EUID& euid2);

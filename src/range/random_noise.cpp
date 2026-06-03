@@ -28,7 +28,7 @@ RTLSRangeRandomNoise::RTLSRangeRandomNoise(const double& a, const double& b)
 
 //-----------------------------------------------------------------------------
 double RTLSRangeRandomNoise::draw(const double& range) {
-  return dist_(generator_) * computeStd(range);
+  return dist_(generator_) * compute_std(range);
 }
 
 }  // namespace core

@@ -36,7 +36,8 @@ namespace core {
 
 class RTLSPositionAwareScheduler : public RTLSRoundRobinScheduler {
  public:
-  RTLSPositionAwareScheduler(const double& pollRate, const double& maximalRange,
+  RTLSPositionAwareScheduler(const double& poll_rate,
+                             const double& maximal_range,
                              const std::vector<std::string>& initiators_names,
                              const VectorOfEigenVector3d& initiators_positions,
                              const std::vector<std::string>& responders_names,

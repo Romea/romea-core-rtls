@@ -43,13 +43,13 @@ namespace core {
 
 //-----------------------------------------------------------------------------
 RTLSPositionAwareScheduler::RTLSPositionAwareScheduler(
-    const double& pollRate, const double& maximalResearchDistance,
+    const double& poll_rate, const double& maximalResearchDistance,
     const std::vector<std::string>& initiators_names,
     const VectorOfEigenVector3d& initiators_positions,
     const std::vector<std::string>& responders_names,
     const VectorOfEigenVector3d& respondersPositions,
     RangingRequestCallback rangingRequestCallback)
-    : RTLSRoundRobinScheduler(pollRate, initiators_names, responders_names,
+    : RTLSRoundRobinScheduler(poll_rate, initiators_names, responders_names,
                               rangingRequestCallback),
       reachable_responders_(
           respondersPositions,

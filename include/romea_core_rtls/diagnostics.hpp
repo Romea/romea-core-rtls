@@ -33,7 +33,7 @@ namespace core {
 
 class RTLSTransceiversDiagnostics {
  public:
-  RTLSTransceiversDiagnostics(const double& pollRate,
+  RTLSTransceiversDiagnostics(const double& poll_rate,
                               const std::vector<std::string>& initiators_names,
                               const std::vector<std::string>& responders_names);
 
@@ -46,10 +46,12 @@ class RTLSTransceiversDiagnostics {
 
  private:
   void init_initiators_diagnostics_(
-      const double& pollRate, const std::vector<std::string>& initiators_names);
+      const double& poll_rate,
+      const std::vector<std::string>& initiators_names);
 
   void init_responders_diagnostics_(
-      const double& pollRate, const std::vector<std::string>& responders_names);
+      const double& poll_rate,
+      const std::vector<std::string>& responders_names);
 
   void update_initiator_reliability_(const double& reliability,
                                      const size_t& initiator_index);

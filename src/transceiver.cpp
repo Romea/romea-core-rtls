@@ -32,7 +32,7 @@ const RTLSTransceiver::Function& RTLSTransceiver::get_function() {
 }
 
 //-----------------------------------------------------------------------------
-RTLSTransceiver::Function stringToFunction(const std::string& function) {
+RTLSTransceiver::Function string_to_function(const std::string& function) {
   if (function == "listener") {
     return RTLSTransceiver::Function::LISTENER;
   } else if (function == "initiator") {
@@ -45,7 +45,7 @@ RTLSTransceiver::Function stringToFunction(const std::string& function) {
 }
 
 //-----------------------------------------------------------------------------
-std::string functionToString(const RTLSTransceiver::Function& function) {
+std::string function_to_string(const RTLSTransceiver::Function& function) {
   switch (function) {
     case RTLSTransceiver::Function::LISTENER:
       return "listener";
@@ -68,7 +68,11 @@ bool operator==(const RTLSTransceiver::EUID& euid1,
 //-----------------------------------------------------------------------------
 bool operator<(const RTLSTransceiver::EUID& euid1,
                const RTLSTransceiver::EUID& euid2) {
-  return euid1.pan_id * 65535 + euid1.id < euid2.pan_id * 65535 + euid2.id;
+  if (euid1.pan_id != euid2.pan_id) {
+    return euid1.pan_id < euid2.pan_id;
+  }
+
+  return euid1.id < euid2.id;
 }
 
 }  // namespace core

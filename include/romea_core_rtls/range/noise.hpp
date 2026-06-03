@@ -25,7 +25,7 @@ class RTLSRangeNoise {
 
   RTLSRangeNoise(const double& a, const double& b);
 
-  double computeStd(const double& range);
+  double compute_std(const double& range);
 
  private:
   double a_;

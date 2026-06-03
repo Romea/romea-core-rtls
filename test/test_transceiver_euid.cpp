@@ -16,6 +16,9 @@
 // gtest
 #include "gtest/gtest.h"
 
+// std
+#include <set>
+
 // romea
 #include "romea_core_rtls/transceiver.hpp"
 
@@ -42,14 +45,25 @@ TEST(TestTransceiverEUID, checkLowerThanOperator) {
   EXPECT_TRUE(euid10 < euid11);
 }
 
-// TEST(TestTransceiverRangingResult, testNotEmptyResult)
-// {
-//   romea::RTLSTransceiverRangingResult result;
-//   result.range = 10.0;
-//   result.firstPathRxPowerLevel = 10;
-//   result.totalRxPowerLevel = 20;
-//   EXPECT_FALSE(romea::isEmpty(result));
-// }
+//-----------------------------------------------------------------------------
+TEST(TestTransceiverEUID, checkLowerThanOperatorOnBoundaryValues) {
+  romea::core::RTLSTransceiver::EUID euid0Max{0, 65535};
+  romea::core::RTLSTransceiver::EUID euid10{1, 0};
+
+  EXPECT_TRUE(euid0Max < euid10);
+  EXPECT_FALSE(euid10 < euid0Max);
+}
+
+//-----------------------------------------------------------------------------
+TEST(TestTransceiverEUID, checkEUIDCanBeUsedInOrderedContainers) {
+  std::set<romea::core::RTLSTransceiver::EUID> euids;
+
+  euids.insert({0, 65535});
+  euids.insert({1, 0});
+  euids.insert({1, 0});
+
+  EXPECT_EQ(euids.size(), 2);
+}
 
 //-----------------------------------------------------------------------------
 int main(int argc, char** argv) {

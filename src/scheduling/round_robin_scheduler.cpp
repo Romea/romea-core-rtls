@@ -15,6 +15,7 @@
 
 // std
 #include <iostream>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -24,20 +25,46 @@
 namespace romea {
 namespace core {
 
+namespace {
+
+void validate_scheduler_inputs(
+    const double& poll_rate, const std::vector<std::string>& initiators_names,
+    const std::vector<std::string>& responders_names) {
+  if (poll_rate <= 0.0) {
+    throw std::invalid_argument(
+        "RTLSRoundRobinScheduler poll_rate must be strictly positive.");
+  }
+
+  if (initiators_names.empty()) {
+    throw std::invalid_argument(
+        "RTLSRoundRobinScheduler requires at least one initiator.");
+  }
+
+  if (responders_names.empty()) {
+    throw std::invalid_argument(
+        "RTLSRoundRobinScheduler requires at least one responder.");
+  }
+}
+
+}  // namespace
+
 //-----------------------------------------------------------------------------
 RTLSRoundRobinScheduler::RTLSRoundRobinScheduler(
-    const double& pollRate, const std::vector<std::string>& initiators_names,
+    const double& poll_rate, const std::vector<std::string>& initiators_names,
     const std::vector<std::string>& responders_names,
     RangingRequestCallback rangingRequestCallback)
-    : number_of_initiators_(initiators_names.size()),
+    : number_of_initiators_(
+          (validate_scheduler_inputs(poll_rate, initiators_names,
+                                     responders_names),
+           initiators_names.size())),
       initiators_poll_index_(initiators_names.size() - 1),
       number_of_responders_(responders_names.size()),
       responders_poll_index_(responders_names.size() - 1),
       timer_(std::bind(&RTLSRoundRobinScheduler::timer_callback_, this),
-             durationFromSecond(1 / pollRate)),
-      timeout_(durationFromSecond(pollRate) - durationFromMilliSecond(1)),
+             durationFromSecond(1 / poll_rate)),
+      timeout_(durationFromSecond(1 / poll_rate) - durationFromMilliSecond(1)),
       ranging_request_callback_(rangingRequestCallback),
-      diagnostics_(pollRate, initiators_names, responders_names) {}
+      diagnostics_(poll_rate, initiators_names, responders_names) {}
 
 //-----------------------------------------------------------------------------
 void RTLSRoundRobinScheduler::start() { timer_.start(); }

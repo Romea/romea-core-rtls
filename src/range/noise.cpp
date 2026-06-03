@@ -26,7 +26,7 @@ RTLSRangeNoise::RTLSRangeNoise(const double& noiseA, const double& noiseB)
     : a_(noiseA), b_(noiseB) {}
 
 //-----------------------------------------------------------------------------
-double RTLSRangeNoise::computeStd(const double& range) {
+double RTLSRangeNoise::compute_std(const double& range) {
   return a_ * range + b_;
 }
 

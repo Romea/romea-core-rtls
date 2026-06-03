@@ -21,6 +21,7 @@
 // romea
 #include "romea_core_common/geometry/Pose2D.hpp"
 #include "romea_core_common/math/EulerAngles.hpp"
+#include "romea_core_common/math/Matrix.hpp"
 
 namespace romea {
 namespace core {
@@ -80,10 +81,10 @@ void deserialize_orientation(const unsigned char* buffer, double& value) {
 //-----------------------------------------------------------------------------
 void serialize_orientation_variance(const double& value,
                                     unsigned char* buffer) {
-  if (value > 0.199) {
+  if (value < 0.0 || value > 0.199) {
     throw std::runtime_error(
-        "Cannot serialize orientation variance because it's value is greater "
-        "than 0.2");
+        "Cannot serialize orientation variance because its value is outside "
+        "[0, 0.2]");
   }
   *buffer = std::ceil(std::sqrt(value) / M_PI * 1800);
 }
@@ -112,6 +113,12 @@ void deserialize_position2d(const unsigned char* buffer,
 void serialize_position2d_covariance(
     const Eigen::Ref<const Eigen::Matrix2d>& covariance,
     unsigned char* buffer) {
+  if (!isPositiveSemiDefiniteMatrix(covariance)) {
+    throw std::runtime_error(
+        "Cannot serialize position covariance because it is not positive "
+        "semi-definite");
+  }
+
   double std =
       std::max(std::sqrt(covariance(0, 0)), std::sqrt(covariance(1, 1)));
 

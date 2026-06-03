@@ -18,6 +18,7 @@
 #include <vector>
 
 // romea
+#include "romea_core_common/math/Matrix.hpp"
 #include "romea_core_rtls/serialization/twist2D.hpp"
 
 namespace romea {
@@ -25,10 +26,10 @@ namespace core {
 
 //-----------------------------------------------------------------------------
 void serialize_linear_speed(const double& value, unsigned char* buffer) {
-  if (value > 27.778) {
+  if (std::abs(value) > 27.778) {
     throw std::runtime_error(
-        "Cannot serialize linear speed because it's value is greater than "
-        "100km/h");
+        "Cannot serialize linear speed because its absolute value is greater "
+        "than 100km/h");
   }
 
   *reinterpret_cast<uint16_t*>(buffer) =
@@ -43,14 +44,13 @@ void deserialize_linear_speed(const unsigned char* buffer, double& value) {
 //-----------------------------------------------------------------------------
 void serialize_linear_speed_variance(const double& value,
                                      unsigned char* buffer) {
-  double std = std::sqrt(value);
-
-  if (std::abs(value) > 2.) {
+  if (value < 0.0 || value > 4.0) {
     throw std::runtime_error(
-        "Cannot serialize linear speed variance because it's value is greater "
-        "than 4");
+        "Cannot serialize linear speed variance because its value is outside "
+        "[0, 4]");
   }
 
+  double std = std::sqrt(value);
   *buffer = std::ceil(std * 100);
 }
 
@@ -64,7 +64,7 @@ void deserialize_linear_speed_variance(const unsigned char* buffer,
 void serialize_angular_speed(const double& value, unsigned char* buffer) {
   if (std::abs(value) > M_PI) {
     throw std::runtime_error(
-        "Cannot serialize linear speed because it's value is greater than "
+        "Cannot serialize angular speed because its absolute value is greater "
         "180deg/s");
   }
 
@@ -80,10 +80,10 @@ void deserialize_angular_speed(const unsigned char* buffer, double& value) {
 //-----------------------------------------------------------------------------
 void serialize_angular_speed_variance(const double& value,
                                       unsigned char* buffer) {
-  if (value > 0.199) {
+  if (value < 0.0 || value > 0.199) {
     throw std::runtime_error(
-        "Cannot serialize orientation variance because it's value is greater "
-        "than 0.2");
+        "Cannot serialize angular speed variance because its value is outside "
+        "[0, 0.2]");
   }
   *buffer = std::ceil(std::sqrt(value) / M_PI * 1800);
 }
@@ -113,6 +113,12 @@ void deserialize_linear_speeds(const unsigned char* buffer,
 void serialize_linear_speeds_covariance(
     const Eigen::Ref<const Eigen::Matrix2d>& covariance,
     unsigned char* buffer) {
+  if (!isPositiveSemiDefiniteMatrix(covariance)) {
+    throw std::runtime_error(
+        "Cannot serialize linear speeds covariance because it is not positive "
+        "semi-definite");
+  }
+
   serialize_linear_speed_variance(covariance(0, 0), buffer);
   serialize_linear_speed_variance(covariance(1, 1), buffer + 1);
 }

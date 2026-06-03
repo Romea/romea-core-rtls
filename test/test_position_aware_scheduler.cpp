@@ -30,7 +30,7 @@ class TestPositionAwareScheduler : public ::testing::Test {
   TestPositionAwareScheduler()
       : scheduler_(nullptr), initiators_indexes_(), responders_indexes_() {}
 
-  void init(const double& pollRate, const double& maximalResearchDistance) {
+  void init(const double& poll_rate, const double& maximalResearchDistance) {
     std::vector<std::string> initiators_names{"initiator0", "initiator1"};
 
     romea::core::VectorOfEigenVector3d initiatorsPositions = {
@@ -52,7 +52,7 @@ class TestPositionAwareScheduler : public ::testing::Test {
     };
 
     scheduler_ = std::make_unique<romea::core::RTLSPositionAwareScheduler>(
-        pollRate, maximalResearchDistance, initiators_names,
+        poll_rate, maximalResearchDistance, initiators_names,
         initiatorsPositions, responders_names, respondersPositions, callback);
   }
 
