@@ -18,27 +18,33 @@
 // romea
 #include "romea_core_rtls/ranging/status.hpp"
 
-namespace romea {
-namespace core {
+namespace romea
+{
+namespace core
+{
 
 //-----------------------------------------------------------------------------
 RTLSRangingStatusEvaluator::RTLSRangingStatusEvaluator(
-    const double& minimal_range, const double& maximal_range,
-    const uint8_t& rx_power_rejection_threshold)
-    : minimal_range_(minimal_range),
-      maximal_range_(maximal_range),
-      rx_power_rejection_threshold_(rx_power_rejection_threshold) {}
+  const double & minimal_range,
+  const double & maximal_range,
+  const uint8_t & rx_power_rejection_threshold)
+: minimal_range_(minimal_range),
+  maximal_range_(maximal_range),
+  rx_power_rejection_threshold_(rx_power_rejection_threshold)
+{
+}
 
 //-----------------------------------------------------------------------------
-RTLSRangingStatus RTLSRangingStatusEvaluator::evaluate(
-    const RTLSRangingResult& result) {
+RTLSRangingStatus RTLSRangingStatusEvaluator::evaluate(const RTLSRangingResult & result)
+{
   if (isEmpty(result)) {
     return RTLSRangingStatus::FAILED;
   }
 
-  if (result.range >= minimal_range_ && result.range <= maximal_range_ &&
-      result.total_rx_power_level - result.first_path_rx_power_level <
-          rx_power_rejection_threshold_) {
+  if (
+    result.range >= minimal_range_ && result.range <= maximal_range_ &&
+    result.total_rx_power_level - result.first_path_rx_power_level <
+      rx_power_rejection_threshold_) {
     return RTLSRangingStatus::AVAILABLE;
   } else {
     return RTLSRangingStatus::UNAVAILABLE;

@@ -21,22 +21,23 @@
 // romea
 #include "romea_core_rtls/trilateration/simple_trilateration2D.hpp"
 
-namespace romea {
-namespace core {
+namespace romea
+{
+namespace core
+{
 
 //-----------------------------------------------------------------------------
-VectorOfEigenVector2d SimpleTrilateration2D::compute_(const Eigen::Vector2d& p1,
-                                                      const Eigen::Vector2d& p2,
-                                                      const double& r1,
-                                                      const double& r2) {
+VectorOfEigenVector2d SimpleTrilateration2D::compute_(
+  const Eigen::Vector2d & p1, const Eigen::Vector2d & p2, const double & r1, const double & r2)
+{
   double dx = p2.x() - p1.x();
   double dy = p2.y() - p1.y();
 
   double base = std::sqrt(dx * dx + dy * dy);
   double theta = std::atan2(dy, dx);
   //  std::cout << (base*base+r1*r1-r2*r2)/(2*base*r1) << std::endl;
-  double alpha = std::acos(std::max(
-      std::min((base * base + r1 * r1 - r2 * r2) / (2 * base * r1), 1.), -1.));
+  double alpha =
+    std::acos(std::max(std::min((base * base + r1 * r1 - r2 * r2) / (2 * base * r1), 1.), -1.));
 
   VectorOfEigenVector2d solutions(2, p1);
   solutions[0].x() += r1 * std::cos(theta + alpha);
@@ -65,12 +66,15 @@ VectorOfEigenVector2d SimpleTrilateration2D::compute_(const Eigen::Vector2d& p1,
 
 //-----------------------------------------------------------------------------
 Eigen::Vector2d SimpleTrilateration2D::compute_(
-    const VectorOfEigenVector2d& tag_positions,
-    const std::vector<double>& ranges, const size_t& i, const size_t& j) {
+  const VectorOfEigenVector2d & tag_positions,
+  const std::vector<double> & ranges,
+  const size_t & i,
+  const size_t & j)
+{
   std::vector<double> errors(2, 0);
 
   VectorOfEigenVector2d solutions =
-      compute_(tag_positions[i], tag_positions[j], ranges[i], ranges[j]);
+    compute_(tag_positions[i], tag_positions[j], ranges[i], ranges[j]);
   size_t k = (j + 1) % ranges.size();
   for (; k != i; k = (k + 1) % ranges.size()) {
     errors[0] += std::abs((tag_positions[k] - solutions[0]).norm() - ranges[k]);
@@ -84,22 +88,21 @@ Eigen::Vector2d SimpleTrilateration2D::compute_(
 
 //-----------------------------------------------------------------------------
 Eigen::Vector2d SimpleTrilateration2D::compute_(
-    const VectorOfEigenVector2d& tag_positions,
-    const std::vector<double>& ranges,
-    const std::vector<size_t>& ranges_indexes, const size_t& i,
-    const size_t& j) {
+  const VectorOfEigenVector2d & tag_positions,
+  const std::vector<double> & ranges,
+  const std::vector<size_t> & ranges_indexes,
+  const size_t & i,
+  const size_t & j)
+{
   std::vector<double> errors(2, 0);
 
-  VectorOfEigenVector2d solutions =
-      compute_(tag_positions[i], tag_positions[j], ranges[ranges_indexes[i]],
-               ranges[ranges_indexes[j]]);
+  VectorOfEigenVector2d solutions = compute_(
+    tag_positions[i], tag_positions[j], ranges[ranges_indexes[i]], ranges[ranges_indexes[j]]);
 
   size_t k = (j + 1) % ranges.size();
   for (; k != i; k = (k + 1) % ranges.size()) {
-    errors[0] += std::abs((tag_positions[k] - solutions[0]).norm() -
-                          ranges[ranges_indexes[k]]);
-    errors[1] += std::abs((tag_positions[k] - solutions[1]).norm() -
-                          ranges[ranges_indexes[k]]);
+    errors[0] += std::abs((tag_positions[k] - solutions[0]).norm() - ranges[ranges_indexes[k]]);
+    errors[1] += std::abs((tag_positions[k] - solutions[1]).norm() - ranges[ranges_indexes[k]]);
   }
 
   //  std::cout <<" errors "<< errors[0] <<" "<<errors[1]<< std::endl;
@@ -108,8 +111,8 @@ Eigen::Vector2d SimpleTrilateration2D::compute_(
 
 //-----------------------------------------------------------------------------
 Eigen::Vector2d SimpleTrilateration2D::compute(
-    const VectorOfEigenVector2d& tag_positions,
-    const std::vector<double>& ranges) {
+  const VectorOfEigenVector2d & tag_positions, const std::vector<double> & ranges)
+{
   assert(tag_positions.size() >= 2);
   assert(tag_positions.size() == ranges.size());
 
@@ -117,8 +120,7 @@ Eigen::Vector2d SimpleTrilateration2D::compute(
     return compute_(tag_positions, ranges, 0, 1);
   } else {
     Eigen::Vector2d solution = Eigen::Vector2d::Zero();
-    for (size_t i = 0, j = 1; i < ranges.size();
-         ++i, j = (j + 1) % ranges.size()) {
+    for (size_t i = 0, j = 1; i < ranges.size(); ++i, j = (j + 1) % ranges.size()) {
       Eigen::Vector2d solution_ = compute_(tag_positions, ranges, i, j);
       solution += solution_;
     }
@@ -128,9 +130,10 @@ Eigen::Vector2d SimpleTrilateration2D::compute(
 
 //-----------------------------------------------------------------------------
 Eigen::Vector2d SimpleTrilateration2D::compute(
-    const VectorOfEigenVector2d& tag_positions,
-    const std::vector<double>& ranges,
-    const std::vector<size_t>& ranges_indexes) {
+  const VectorOfEigenVector2d & tag_positions,
+  const std::vector<double> & ranges,
+  const std::vector<size_t> & ranges_indexes)
+{
   assert(tag_positions.size() >= 2);
   assert(ranges_indexes.size() >= 2);
   assert(tag_positions.size() == ranges.size());
@@ -139,8 +142,7 @@ Eigen::Vector2d SimpleTrilateration2D::compute(
     return compute_(tag_positions, ranges, ranges_indexes, 0, 1);
   } else {
     Eigen::Vector2d solution = Eigen::Vector2d::Zero();
-    for (size_t i = 0, j = 1; i < ranges_indexes.size();
-         ++i, j = (j + 1) % ranges_indexes.size()) {
+    for (size_t i = 0, j = 1; i < ranges_indexes.size(); ++i, j = (j + 1) % ranges_indexes.size()) {
       solution += compute_(tag_positions, ranges, ranges_indexes, i, j);
     }
     return solution / ranges.size();

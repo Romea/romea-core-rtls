@@ -20,70 +20,69 @@
 #include "romea_core_rtls/ranging/status.hpp"
 
 //-----------------------------------------------------------------------------
-class TestRangingStatus : public ::testing::Test {
- protected:
+class TestRangingStatus : public ::testing::Test
+{
+protected:
   TestRangingStatus() : ranging_status_(0.5, 20.0, 20) {}
 
   romea::core::RTLSRangingStatusEvaluator ranging_status_;
 };
 
 //-----------------------------------------------------------------------------
-TEST_F(TestRangingStatus, checkRangingIsFailed) {
+TEST_F(TestRangingStatus, checkRangingIsFailed)
+{
   romea::core::RTLSRangingResult result;
   result.range = 0.;
   result.first_path_rx_power_level = 0;
   result.total_rx_power_level = 0;
 
-  EXPECT_TRUE(ranging_status_.evaluate(result) ==
-              romea::core::RTLSRangingStatus::FAILED);
+  EXPECT_TRUE(ranging_status_.evaluate(result) == romea::core::RTLSRangingStatus::FAILED);
 }
 
 //-----------------------------------------------------------------------------
-TEST_F(TestRangingStatus,
-       checkRangingIsUnavailableWhenRangeIsLowerThanMinimalRange) {
+TEST_F(TestRangingStatus, checkRangingIsUnavailableWhenRangeIsLowerThanMinimalRange)
+{
   romea::core::RTLSRangingResult result;
   result.range = 0.2;
   result.first_path_rx_power_level = 8;
   result.total_rx_power_level = 10;
 
-  EXPECT_TRUE(ranging_status_.evaluate(result) ==
-              romea::core::RTLSRangingStatus::UNAVAILABLE);
+  EXPECT_TRUE(ranging_status_.evaluate(result) == romea::core::RTLSRangingStatus::UNAVAILABLE);
 }
 
 //-----------------------------------------------------------------------------
-TEST_F(TestRangingStatus,
-       checkRangingIsUnavailableWhenRangeIsHigherThanMaximalRange) {
+TEST_F(TestRangingStatus, checkRangingIsUnavailableWhenRangeIsHigherThanMaximalRange)
+{
   romea::core::RTLSRangingResult result;
   result.range = 22.;
   result.first_path_rx_power_level = 8;
   result.total_rx_power_level = 10;
-  EXPECT_TRUE(ranging_status_.evaluate(result) ==
-              romea::core::RTLSRangingStatus::UNAVAILABLE);
+  EXPECT_TRUE(ranging_status_.evaluate(result) == romea::core::RTLSRangingStatus::UNAVAILABLE);
 }
 
 //-----------------------------------------------------------------------------
-TEST_F(TestRangingStatus,
-       checkRangingIsUnavailableWhenFirstPathRxPowerLevelIsTooLow) {
+TEST_F(TestRangingStatus, checkRangingIsUnavailableWhenFirstPathRxPowerLevelIsTooLow)
+{
   romea::core::RTLSRangingResult result;
   result.range = 10.;
   result.first_path_rx_power_level = 5;
   result.total_rx_power_level = 30;
-  EXPECT_TRUE(ranging_status_.evaluate(result) ==
-              romea::core::RTLSRangingStatus::UNAVAILABLE);
+  EXPECT_TRUE(ranging_status_.evaluate(result) == romea::core::RTLSRangingStatus::UNAVAILABLE);
 }
 
 //-----------------------------------------------------------------------------
-TEST_F(TestRangingStatus, checkIsAvailable) {
+TEST_F(TestRangingStatus, checkIsAvailable)
+{
   romea::core::RTLSRangingResult result;
   result.range = 10.;
   result.first_path_rx_power_level = 28;
   result.total_rx_power_level = 30;
-  EXPECT_TRUE(ranging_status_.evaluate(result) ==
-              romea::core::RTLSRangingStatus::AVAILABLE);
+  EXPECT_TRUE(ranging_status_.evaluate(result) == romea::core::RTLSRangingStatus::AVAILABLE);
 }
 
 //-----------------------------------------------------------------------------
-int main(int argc, char** argv) {
+int main(int argc, char ** argv)
+{
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }

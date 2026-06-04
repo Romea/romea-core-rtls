@@ -25,35 +25,44 @@
 // romea
 #include "romea_core_rtls/scheduling/position_aware_scheduler.hpp"
 
-class TestPositionAwareScheduler : public ::testing::Test {
- protected:
-  TestPositionAwareScheduler()
-      : scheduler_(nullptr), initiators_indexes_(), responders_indexes_() {}
+class TestPositionAwareScheduler : public ::testing::Test
+{
+protected:
+  TestPositionAwareScheduler() : scheduler_(nullptr), initiators_indexes_(), responders_indexes_()
+  {
+  }
 
-  void init(const double& poll_rate, const double& maximalResearchDistance) {
+  void init(const double & poll_rate, const double & maximalResearchDistance)
+  {
     std::vector<std::string> initiators_names{"initiator0", "initiator1"};
 
     romea::core::VectorOfEigenVector3d initiatorsPositions = {
-        Eigen::Vector3d(1.0, 0.5, 2.0), Eigen::Vector3d(-1.0, -0.5, 2.0)};
+      Eigen::Vector3d(1.0, 0.5, 2.0), Eigen::Vector3d(-1.0, -0.5, 2.0)};
 
-    std::vector<std::string> responders_names(
-        {"responder0", "responder1", "responder2"});
+    std::vector<std::string> responders_names({"responder0", "responder1", "responder2"});
 
     romea::core::VectorOfEigenVector3d respondersPositions = {
-        Eigen::Vector3d(-10.0, 0.0, 2.0), Eigen::Vector3d(0.0, 0.0, 2.0),
-        Eigen::Vector3d(10.0, 0.0, 2.0)};
+      Eigen::Vector3d(-10.0, 0.0, 2.0),
+      Eigen::Vector3d(0.0, 0.0, 2.0),
+      Eigen::Vector3d(10.0, 0.0, 2.0)};
 
-    auto callback = [this](const size_t& initiator_index,
-                           const size_t& responder_index,
-                           const romea::core::Duration& /*timeout*/) {
+    auto callback = [this](
+                      const size_t & initiator_index,
+                      const size_t & responder_index,
+                      const romea::core::Duration & /*timeout*/) {
       initiators_indexes_.push_back(initiator_index);
       responders_indexes_.push_back(responder_index);
       return romea::core::RTLSRangingResult();
     };
 
     scheduler_ = std::make_unique<romea::core::RTLSPositionAwareScheduler>(
-        poll_rate, maximalResearchDistance, initiators_names,
-        initiatorsPositions, responders_names, respondersPositions, callback);
+      poll_rate,
+      maximalResearchDistance,
+      initiators_names,
+      initiatorsPositions,
+      responders_names,
+      respondersPositions,
+      callback);
   }
 
   std::unique_ptr<romea::core::RTLSPositionAwareScheduler> scheduler_;
@@ -61,7 +70,8 @@ class TestPositionAwareScheduler : public ::testing::Test {
   std::vector<size_t> responders_indexes_;
 };
 
-TEST_F(TestPositionAwareScheduler, checkPollWhenNoPositionIsGiven) {
+TEST_F(TestPositionAwareScheduler, checkPollWhenNoPositionIsGiven)
+{
   init(30, 20);
 
   scheduler_->start();
@@ -86,7 +96,8 @@ TEST_F(TestPositionAwareScheduler, checkPollWhenNoPositionIsGiven) {
   EXPECT_EQ(responders_indexes_.size(), 60);
 }
 
-TEST_F(TestPositionAwareScheduler, checkPollWhenAllRespondersAreVisible) {
+TEST_F(TestPositionAwareScheduler, checkPollWhenAllRespondersAreVisible)
+{
   init(30, 20);
   scheduler_->start();
   std::this_thread::sleep_for(romea::core::durationFromMilliSecond(100));
@@ -112,7 +123,8 @@ TEST_F(TestPositionAwareScheduler, checkPollWhenAllRespondersAreVisible) {
   EXPECT_EQ(responders_indexes_.size(), 60);
 }
 
-TEST_F(TestPositionAwareScheduler, checkPollWhenTwoRespondersAreVisible) {
+TEST_F(TestPositionAwareScheduler, checkPollWhenTwoRespondersAreVisible)
+{
   init(30, 20);
   scheduler_->start();
   std::this_thread::sleep_for(romea::core::durationFromMilliSecond(100));
@@ -150,7 +162,8 @@ TEST_F(TestPositionAwareScheduler, checkPollWhenTwoRespondersAreVisible) {
   EXPECT_EQ(responders_indexes_.size(), 60);
 }
 
-TEST_F(TestPositionAwareScheduler, checkPollWhenOnlyOneResponderIsVisible) {
+TEST_F(TestPositionAwareScheduler, checkPollWhenOnlyOneResponderIsVisible)
+{
   init(30, 20);
   scheduler_->start();
   std::this_thread::sleep_for(romea::core::durationFromMilliSecond(100));
@@ -178,7 +191,8 @@ TEST_F(TestPositionAwareScheduler, checkPollWhenOnlyOneResponderIsVisible) {
 }
 
 //-----------------------------------------------------------------------------
-int main(int argc, char** argv) {
+int main(int argc, char ** argv)
+{
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }

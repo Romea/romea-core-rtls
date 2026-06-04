@@ -22,27 +22,29 @@
 // romea
 #include "romea_core_rtls/scheduling/round_robin_scheduler.hpp"
 
-namespace romea {
-namespace core {
+namespace romea
+{
+namespace core
+{
 
-namespace {
+namespace
+{
 
 void validate_scheduler_inputs(
-    const double& poll_rate, const std::vector<std::string>& initiators_names,
-    const std::vector<std::string>& responders_names) {
+  const double & poll_rate,
+  const std::vector<std::string> & initiators_names,
+  const std::vector<std::string> & responders_names)
+{
   if (poll_rate <= 0.0) {
-    throw std::invalid_argument(
-        "RTLSRoundRobinScheduler poll_rate must be strictly positive.");
+    throw std::invalid_argument("RTLSRoundRobinScheduler poll_rate must be strictly positive.");
   }
 
   if (initiators_names.empty()) {
-    throw std::invalid_argument(
-        "RTLSRoundRobinScheduler requires at least one initiator.");
+    throw std::invalid_argument("RTLSRoundRobinScheduler requires at least one initiator.");
   }
 
   if (responders_names.empty()) {
-    throw std::invalid_argument(
-        "RTLSRoundRobinScheduler requires at least one responder.");
+    throw std::invalid_argument("RTLSRoundRobinScheduler requires at least one responder.");
   }
 }
 
@@ -50,44 +52,53 @@ void validate_scheduler_inputs(
 
 //-----------------------------------------------------------------------------
 RTLSRoundRobinScheduler::RTLSRoundRobinScheduler(
-    const double& poll_rate, const std::vector<std::string>& initiators_names,
-    const std::vector<std::string>& responders_names,
-    RangingRequestCallback rangingRequestCallback)
-    : number_of_initiators_(
-          (validate_scheduler_inputs(poll_rate, initiators_names,
-                                     responders_names),
-           initiators_names.size())),
-      initiators_poll_index_(initiators_names.size() - 1),
-      number_of_responders_(responders_names.size()),
-      responders_poll_index_(responders_names.size() - 1),
-      timer_(std::bind(&RTLSRoundRobinScheduler::timer_callback_, this),
-             durationFromSecond(1 / poll_rate)),
-      timeout_(durationFromSecond(1 / poll_rate) - durationFromMilliSecond(1)),
-      ranging_request_callback_(rangingRequestCallback),
-      diagnostics_(poll_rate, initiators_names, responders_names) {}
-
-//-----------------------------------------------------------------------------
-void RTLSRoundRobinScheduler::start() { timer_.start(); }
-
-//-----------------------------------------------------------------------------
-void RTLSRoundRobinScheduler::stop() { timer_.stop(); }
-
-//-----------------------------------------------------------------------------
-void RTLSRoundRobinScheduler::timer_callback_() {
-  increment_poll_indexes_();
-  ranging_request_callback_(initiators_poll_index_, responders_poll_index_,
-                            timeout_);
+  const double & poll_rate,
+  const std::vector<std::string> & initiators_names,
+  const std::vector<std::string> & responders_names,
+  RangingRequestCallback rangingRequestCallback)
+: number_of_initiators_(
+    (validate_scheduler_inputs(poll_rate, initiators_names, responders_names),
+     initiators_names.size())),
+  initiators_poll_index_(initiators_names.size() - 1),
+  number_of_responders_(responders_names.size()),
+  responders_poll_index_(responders_names.size() - 1),
+  timer_(
+    std::bind(&RTLSRoundRobinScheduler::timer_callback_, this), durationFromSecond(1 / poll_rate)),
+  timeout_(durationFromSecond(1 / poll_rate) - durationFromMilliSecond(1)),
+  ranging_request_callback_(rangingRequestCallback),
+  diagnostics_(poll_rate, initiators_names, responders_names)
+{
 }
 
 //-----------------------------------------------------------------------------
-void RTLSRoundRobinScheduler::feedback(const size_t& initiator_index,
-                                       const size_t& responder_index,
-                                       const RangingResult& result) {
+void RTLSRoundRobinScheduler::start()
+{
+  timer_.start();
+}
+
+//-----------------------------------------------------------------------------
+void RTLSRoundRobinScheduler::stop()
+{
+  timer_.stop();
+}
+
+//-----------------------------------------------------------------------------
+void RTLSRoundRobinScheduler::timer_callback_()
+{
+  increment_poll_indexes_();
+  ranging_request_callback_(initiators_poll_index_, responders_poll_index_, timeout_);
+}
+
+//-----------------------------------------------------------------------------
+void RTLSRoundRobinScheduler::feedback(
+  const size_t & initiator_index, const size_t & responder_index, const RangingResult & result)
+{
   diagnostics_.update(initiator_index, responder_index, result);
 }
 
 //-----------------------------------------------------------------------------
-void RTLSRoundRobinScheduler::increment_poll_indexes_() {
+void RTLSRoundRobinScheduler::increment_poll_indexes_()
+{
   ++responders_poll_index_;
   if (responders_poll_index_ == number_of_responders_) {
     responders_poll_index_ = 0;
@@ -99,7 +110,8 @@ void RTLSRoundRobinScheduler::increment_poll_indexes_() {
 }
 
 //-----------------------------------------------------------------------------
-DiagnosticReport RTLSRoundRobinScheduler::get_report() {
+DiagnosticReport RTLSRoundRobinScheduler::get_report()
+{
   DiagnosticReport report;
   for (size_t i = 0; i < number_of_initiators_; ++i) {
     report += diagnostics_.get_initiator_report(i);

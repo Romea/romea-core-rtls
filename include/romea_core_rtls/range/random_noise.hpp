@@ -22,19 +22,22 @@
 // romea
 #include "romea_core_rtls/range/noise.hpp"
 
-namespace romea {
-namespace core {
+namespace romea
+{
+namespace core
+{
 
-class RTLSRangeRandomNoise : public RTLSRangeNoise {
- public:
+class RTLSRangeRandomNoise : public RTLSRangeNoise
+{
+public:
   RTLSRangeRandomNoise();
 
-  RTLSRangeRandomNoise(const double& a, const double& b);
+  RTLSRangeRandomNoise(const double & a, const double & b);
 
- public:
-  double draw(const double& range);
+public:
+  double draw(const double & range);
 
- private:
+private:
   std::default_random_engine generator_;
   std::normal_distribution<double> dist_;
 };

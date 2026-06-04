@@ -22,10 +22,13 @@
 // romea
 #include "romea_core_rtls/ranging/result.hpp"
 
-namespace romea {
-namespace core {
+namespace romea
+{
+namespace core
+{
 
-struct RTLSRangingResponse {
+struct RTLSRangingResponse
+{
   RTLSRangingResult ranging_result;
   std::vector<unsigned char> payload;
 };

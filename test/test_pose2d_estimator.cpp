@@ -24,7 +24,8 @@
 #include "romea_core_rtls/trilateration/pose2D_estimator.hpp"
 
 //-----------------------------------------------------------------------------
-TEST(TestRtlsPoseEstimator, testRtlsPoseEstimator) {
+TEST(TestRtlsPoseEstimator, testRtlsPoseEstimator)
+{
   using RangeVector = std::vector<std::optional<double>>;
   using RangeArray = std::vector<RangeVector>;
 
@@ -38,22 +39,20 @@ TEST(TestRtlsPoseEstimator, testRtlsPoseEstimator) {
   anchor_positions.emplace_back(0, 0.21, 0.39);
   anchor_positions.emplace_back(0.85, 0, 0.44);
 
-  romea::core::RTLSPose2DEstimator estimator(anchor_positions, tag_positions,
-                                             0.001);
+  romea::core::RTLSPose2DEstimator estimator(anchor_positions, tag_positions, 0.001);
 
   double rho = 5;
   double theta = 0;
   double course = -M_PI;
   for (; theta < 2 * M_PI; theta += M_PI / 4, course += M_PI / 3) {
     Eigen::Matrix3d R = romea::core::eulerAnglesToRotation3D(
-        Eigen::Vector3d(0, 0, romea::core::between0And2Pi(course)));
+      Eigen::Vector3d(0, 0, romea::core::between0And2Pi(course)));
     Eigen::Vector3d T(rho * std::cos(theta), rho * std::cos(theta), 0);
 
     RangeArray ranges(3, RangeVector(3));
     for (size_t i = 0; i < 3; i++) {
       for (size_t j = 0; j < 3; j++) {
-        ranges[i][j] =
-            ((R * anchor_positions[i] + T) - tag_positions[j]).head<2>().norm();
+        ranges[i][j] = ((R * anchor_positions[i] + T) - tag_positions[j]).head<2>().norm();
       }
     }
 
@@ -61,14 +60,13 @@ TEST(TestRtlsPoseEstimator, testRtlsPoseEstimator) {
     EXPECT_TRUE(estimator.estimate(10, 0.02));
     EXPECT_NEAR(T[0], estimator.getEstimate()[0], 0.01);
     EXPECT_NEAR(T[1], estimator.getEstimate()[1], 0.01);
-    EXPECT_NEAR(
-        romea::core::betweenMinusPiAndPi(course - estimator.getEstimate()[2]),
-        0.0, 0.01);
+    EXPECT_NEAR(romea::core::betweenMinusPiAndPi(course - estimator.getEstimate()[2]), 0.0, 0.01);
   }
 }
 
 //-----------------------------------------------------------------------------
-int main(int argc, char** argv) {
+int main(int argc, char ** argv)
+{
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }

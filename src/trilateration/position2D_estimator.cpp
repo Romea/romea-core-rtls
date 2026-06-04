@@ -17,18 +17,21 @@
 
 #include "romea_core_rtls/trilateration/simple_trilateration2D.hpp"
 
-namespace {
+namespace
+{
 const size_t MINIMAL_NUMBER_OF_RANGES_TO_COMPUTE_POSITION = 2;
 }
 
-namespace romea {
-namespace core {
+namespace romea
+{
+namespace core
+{
 
 //-----------------------------------------------------------------------------
 RTLSPosition2DEstimator::RTLSPosition2DEstimator(
-    const VectorOfEigenVector3d& referencetag_positions,
-    const double& estimateEpsilon)
-    : NLSE(estimateEpsilon) {
+  const VectorOfEigenVector3d & referencetag_positions, const double & estimateEpsilon)
+: NLSE(estimateEpsilon)
+{
   estimate_.resize(2);
   estimateCovariance_.resize(2, 2);
   leastSquares_.setEstimateSize(2);
@@ -54,7 +57,8 @@ RTLSPosition2DEstimator::RTLSPosition2DEstimator(
 // }
 
 //--------------------------------------- --------------------------------------
-bool RTLSPosition2DEstimator::init(const RangeVector& ranges) {
+bool RTLSPosition2DEstimator::init(const RangeVector & ranges)
+{
   if (ranges_.empty()) {
     return false;
   }
@@ -67,9 +71,9 @@ bool RTLSPosition2DEstimator::init(const RangeVector& ranges) {
     }
   }
 
-  if (indexes_of_available_ranges_.size() == ranges_.size() ||
-      indexes_of_available_ranges_.size() >
-          MINIMAL_NUMBER_OF_RANGES_TO_COMPUTE_POSITION) {
+  if (
+    indexes_of_available_ranges_.size() == ranges_.size() ||
+    indexes_of_available_ranges_.size() > MINIMAL_NUMBER_OF_RANGES_TO_COMPUTE_POSITION) {
     leastSquares_.setDataSize(indexes_of_available_ranges_.size());
     return true;
   } else {
@@ -105,15 +109,17 @@ bool RTLSPosition2DEstimator::init(const RangeVector& ranges) {
 // }
 
 //-----------------------------------------------------------------------------
-void RTLSPosition2DEstimator::computeGuess_() {
-  estimate_ = SimpleTrilateration2D::compute(reference_tag_positions_, ranges_,
-                                             indexes_of_available_ranges_);
+void RTLSPosition2DEstimator::computeGuess_()
+{
+  estimate_ =
+    SimpleTrilateration2D::compute(reference_tag_positions_, ranges_, indexes_of_available_ranges_);
 }
 
 //-----------------------------------------------------------------------------
-void RTLSPosition2DEstimator::computeJacobianAndY_() {
-  auto& J = leastSquares_.getJ();
-  auto& Y = leastSquares_.getY();
+void RTLSPosition2DEstimator::computeJacobianAndY_()
+{
+  auto & J = leastSquares_.getJ();
+  auto & Y = leastSquares_.getY();
 
   for (size_t n = 0; n < indexes_of_available_ranges_.size(); ++n) {
     size_t rangeIndex = indexes_of_available_ranges_[n];

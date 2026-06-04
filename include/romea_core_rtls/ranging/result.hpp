@@ -19,17 +19,20 @@
 // romea
 #include <romea_core_common/time/Time.hpp>
 
-namespace romea {
-namespace core {
+namespace romea
+{
+namespace core
+{
 
-struct RTLSRangingResult {
+struct RTLSRangingResult
+{
   Duration duration;
   double range;
   unsigned char first_path_rx_power_level;
   unsigned char total_rx_power_level;
 };
 
-bool isEmpty(const RTLSRangingResult& result);
+bool isEmpty(const RTLSRangingResult & result);
 
 }  // namespace core
 }  // namespace romea

@@ -18,13 +18,15 @@
 // romea
 #include "romea_core_rtls/ranging/result.hpp"
 
-namespace romea {
-namespace core {
+namespace romea
+{
+namespace core
+{
 
-bool isEmpty(const RTLSRangingResult& result) {
+bool isEmpty(const RTLSRangingResult & result)
+{
   return result.range < std::numeric_limits<double>::epsilon() &&
-         result.first_path_rx_power_level == 0 &&
-         result.total_rx_power_level == 0;
+         result.first_path_rx_power_level == 0 && result.total_rx_power_level == 0;
 }
 
 }  // namespace core

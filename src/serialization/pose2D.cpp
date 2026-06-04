@@ -23,139 +23,144 @@
 #include "romea_core_common/math/EulerAngles.hpp"
 #include "romea_core_common/math/Matrix.hpp"
 
-namespace romea {
-namespace core {
+namespace romea
+{
+namespace core
+{
 
 //-----------------------------------------------------------------------------
-void serialize_cartesian_coordinate(const double& value,
-                                    unsigned char* buffer) {
+void serialize_cartesian_coordinate(const double & value, unsigned char * buffer)
+{
   if (std::abs(value) > 1000000) {
     throw std::runtime_error(
-        "Cannot serialize cartesian coordinate because it's value is greater "
-        "than 1000km");
+      "Cannot serialize cartesian coordinate because it's value is greater "
+      "than 1000km");
   }
 
-  *reinterpret_cast<uint32_t*>(buffer) =
-      static_cast<uint32_t>(value * 1000) + 2147483648;
+  *reinterpret_cast<uint32_t *>(buffer) = static_cast<uint32_t>(value * 1000) + 2147483648;
 }
 
 //-----------------------------------------------------------------------------
-void deserialize_cartesian_coordinate(const unsigned char* buffer,
-                                      double& value) {
-  value = (*reinterpret_cast<const uint32_t*>(buffer) - 2147483648) / 1000.;
+void deserialize_cartesian_coordinate(const unsigned char * buffer, double & value)
+{
+  value = (*reinterpret_cast<const uint32_t *>(buffer) - 2147483648) / 1000.;
 }
 
 //-----------------------------------------------------------------------------
-void serialize_wgs84_coordinate(double& value, unsigned char* buffer) {
+void serialize_wgs84_coordinate(double & value, unsigned char * buffer)
+{
   double angle = between0And2Pi(value);
   double angleInDegree = std::abs(180. * angle / M_PI);
 
   uint16_t degrees = angleInDegree;
   uint16_t minutes = (angleInDegree - degrees) * 60;
   uint16_t seconds = ((angleInDegree - degrees) * 60 - minutes) * 60000;
-  *reinterpret_cast<uint16_t*>(buffer) = degrees * 60 + minutes;
-  *reinterpret_cast<uint16_t*>(buffer + 2) = seconds;
+  *reinterpret_cast<uint16_t *>(buffer) = degrees * 60 + minutes;
+  *reinterpret_cast<uint16_t *>(buffer + 2) = seconds;
 }
 
 //-----------------------------------------------------------------------------
-void deserialize_wgs84_coordinate(const unsigned char* buffer, double& value) {
-  uint16_t seconds = *reinterpret_cast<const uint16_t*>(buffer + 2);
-  uint16_t minutes = *reinterpret_cast<const uint16_t*>(buffer);
+void deserialize_wgs84_coordinate(const unsigned char * buffer, double & value)
+{
+  uint16_t seconds = *reinterpret_cast<const uint16_t *>(buffer + 2);
+  uint16_t minutes = *reinterpret_cast<const uint16_t *>(buffer);
   uint16_t degrees = minutes % 60;
 
-  double angleInDegree =
-      (degrees + (minutes - degrees * 60) / 60. + seconds / 3600000.);
+  double angleInDegree = (degrees + (minutes - degrees * 60) / 60. + seconds / 3600000.);
   value = betweenMinusPiAndPi(angleInDegree / 180. * M_PI);
 }
 
 //-----------------------------------------------------------------------------
-void serialize_orientation(const double& value, unsigned char* buffer) {
-  *reinterpret_cast<uint16_t*>(buffer) = (value / M_PI) * 18000 + 18000;
+void serialize_orientation(const double & value, unsigned char * buffer)
+{
+  *reinterpret_cast<uint16_t *>(buffer) = (value / M_PI) * 18000 + 18000;
 }
 
 //-----------------------------------------------------------------------------
-void deserialize_orientation(const unsigned char* buffer, double& value) {
-  value = (*reinterpret_cast<const uint16_t*>(buffer) - 18000) * M_PI / 18000.;
+void deserialize_orientation(const unsigned char * buffer, double & value)
+{
+  value = (*reinterpret_cast<const uint16_t *>(buffer) - 18000) * M_PI / 18000.;
 }
 
 //-----------------------------------------------------------------------------
-void serialize_orientation_variance(const double& value,
-                                    unsigned char* buffer) {
+void serialize_orientation_variance(const double & value, unsigned char * buffer)
+{
   if (value < 0.0 || value > 0.199) {
     throw std::runtime_error(
-        "Cannot serialize orientation variance because its value is outside "
-        "[0, 0.2]");
+      "Cannot serialize orientation variance because its value is outside "
+      "[0, 0.2]");
   }
   *buffer = std::ceil(std::sqrt(value) / M_PI * 1800);
 }
 
 //-----------------------------------------------------------------------------
-void deserialize_orientation_variance(const unsigned char* buffer,
-                                      double& value) {
+void deserialize_orientation_variance(const unsigned char * buffer, double & value)
+{
   value = std::pow((*buffer * M_PI) / 1800., 2);
 }
 
 //-----------------------------------------------------------------------------
-void serialize_position2d(const Eigen::Ref<const Eigen::Vector2d>& position,
-                          unsigned char* buffer) {
+void serialize_position2d(
+  const Eigen::Ref<const Eigen::Vector2d> & position, unsigned char * buffer)
+{
   serialize_cartesian_coordinate(position.x(), buffer);
   serialize_cartesian_coordinate(position.y(), buffer + 4);
 }
 
 //-----------------------------------------------------------------------------
-void deserialize_position2d(const unsigned char* buffer,
-                            Eigen::Ref<Eigen::Vector2d> position) {
+void deserialize_position2d(const unsigned char * buffer, Eigen::Ref<Eigen::Vector2d> position)
+{
   deserialize_cartesian_coordinate(buffer, position.x());
   deserialize_cartesian_coordinate(buffer + 4, position.y());
 }
 
 //-----------------------------------------------------------------------------
 void serialize_position2d_covariance(
-    const Eigen::Ref<const Eigen::Matrix2d>& covariance,
-    unsigned char* buffer) {
+  const Eigen::Ref<const Eigen::Matrix2d> & covariance, unsigned char * buffer)
+{
   if (!isPositiveSemiDefiniteMatrix(covariance)) {
     throw std::runtime_error(
-        "Cannot serialize position covariance because it is not positive "
-        "semi-definite");
+      "Cannot serialize position covariance because it is not positive "
+      "semi-definite");
   }
 
-  double std =
-      std::max(std::sqrt(covariance(0, 0)), std::sqrt(covariance(1, 1)));
+  double std = std::max(std::sqrt(covariance(0, 0)), std::sqrt(covariance(1, 1)));
 
   if (std::abs(std) > 2.) {
     throw std::runtime_error(
-        "Cannot serialize position covariance because one of variance value is "
-        "greater than 4");
+      "Cannot serialize position covariance because one of variance value is "
+      "greater than 4");
   }
 
   *buffer = std::ceil(std * 100);
 }
 
 //-----------------------------------------------------------------------------
-void deserialize_position2d_covariance(const unsigned char* buffer,
-                                       Eigen::Ref<Eigen::Matrix2d> covariance) {
+void deserialize_position2d_covariance(
+  const unsigned char * buffer, Eigen::Ref<Eigen::Matrix2d> covariance)
+{
   double std = *buffer / 100.;
   covariance = Eigen::Matrix2d::Identity() * std * std;
 }
 
 //-----------------------------------------------------------------------------
-std::vector<unsigned char> serialize_pose2d(const Pose2D& pose) {
+std::vector<unsigned char> serialize_pose2d(const Pose2D & pose)
+{
   std::vector<unsigned char> buffer(12);
   serialize_position2d(pose.position, buffer.data());
   serialize_orientation(pose.yaw, buffer.data() + 8);
-  serialize_position2d_covariance(pose.covariance.block<2, 2>(0, 0),
-                                  buffer.data() + 10);
+  serialize_position2d_covariance(pose.covariance.block<2, 2>(0, 0), buffer.data() + 10);
   serialize_orientation_variance(pose.covariance(2, 2), buffer.data() + 11);
   return buffer;
 }
 
 //-----------------------------------------------------------------------------
-Pose2D deserialize_pose2d(const std::vector<uint8_t>& buffer) {
+Pose2D deserialize_pose2d(const std::vector<uint8_t> & buffer)
+{
   Pose2D pose;
   deserialize_position2d(buffer.data(), pose.position);
   deserialize_orientation(buffer.data() + 8, pose.yaw);
-  deserialize_position2d_covariance(buffer.data() + 10,
-                                    pose.covariance.block<2, 2>(0, 0));
+  deserialize_position2d_covariance(buffer.data() + 10, pose.covariance.block<2, 2>(0, 0));
   deserialize_orientation_variance(buffer.data() + 11, pose.covariance(2, 2));
   return pose;
 }

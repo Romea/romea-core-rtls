@@ -22,50 +22,45 @@
 // romea
 #include "romea_core_common/geometry/Twist2D.hpp"
 
-namespace romea {
-namespace core {
+namespace romea
+{
+namespace core
+{
 
-void serialize_linear_speed(const double& linear_speed, unsigned char* buffer);
+void serialize_linear_speed(const double & linear_speed, unsigned char * buffer);
 
-void deserialize_linear_speed(const unsigned char* buffer,
-                              double& linear_speed);
+void deserialize_linear_speed(const unsigned char * buffer, double & linear_speed);
 
-void serialize_linear_speed_variance(const double& linear_speed_variance,
-                                     unsigned char* buffer);
+void serialize_linear_speed_variance(const double & linear_speed_variance, unsigned char * buffer);
 
-void deserialize_linear_speed_variance(const unsigned char* buffer,
-                                       double& linear_speed_variance);
+void deserialize_linear_speed_variance(
+  const unsigned char * buffer, double & linear_speed_variance);
 
-void serialize_angular_speed(const double& angular_speed,
-                             unsigned char* buffer);
+void serialize_angular_speed(const double & angular_speed, unsigned char * buffer);
 
-void deserialize_angular_speed(const unsigned char* buffer,
-                               double& angular_speed);
+void deserialize_angular_speed(const unsigned char * buffer, double & angular_speed);
 
-void serialize_angular_speed_variance(const double& angular_speed_variance,
-                                      unsigned char* buffer);
+void serialize_angular_speed_variance(
+  const double & angular_speed_variance, unsigned char * buffer);
 
-void deserialize_angular_speed_variance(const unsigned char* buffer,
-                                        double& angular_speed_variance);
+void deserialize_angular_speed_variance(
+  const unsigned char * buffer, double & angular_speed_variance);
 
 void serialize_linear_speeds(
-    const Eigen::Ref<const Eigen::Vector2d>& linear_speeds,
-    unsigned char* buffer);
+  const Eigen::Ref<const Eigen::Vector2d> & linear_speeds, unsigned char * buffer);
 
-void deserialize_linear_speeds(const unsigned char* buffer,
-                               Eigen::Ref<Eigen::Vector2d> linear_speeds);
+void deserialize_linear_speeds(
+  const unsigned char * buffer, Eigen::Ref<Eigen::Vector2d> linear_speeds);
 
 void serialize_linear_speeds_covariance(
-    const Eigen::Ref<const Eigen::Matrix2d>& linear_speeds_covariance,
-    unsigned char* buffer);
+  const Eigen::Ref<const Eigen::Matrix2d> & linear_speeds_covariance, unsigned char * buffer);
 
 void deserialize_linear_speeds_covariance(
-    const unsigned char* buffer,
-    Eigen::Ref<Eigen::Matrix2d> linear_speeds_covariance);
+  const unsigned char * buffer, Eigen::Ref<Eigen::Matrix2d> linear_speeds_covariance);
 
-std::vector<unsigned char> serialize_twist2D(const Twist2D& twist);
+std::vector<unsigned char> serialize_twist2D(const Twist2D & twist);
 
-Twist2D deserialize_twist2D(const std::vector<unsigned char>& twist);
+Twist2D deserialize_twist2D(const std::vector<unsigned char> & twist);
 
 }  // namespace core
 }  // namespace romea

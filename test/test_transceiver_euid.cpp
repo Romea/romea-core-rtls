@@ -23,7 +23,8 @@
 #include "romea_core_rtls/transceiver.hpp"
 
 //-----------------------------------------------------------------------------
-TEST(TestTransceiverEUID, checkEqualOperator) {
+TEST(TestTransceiverEUID, checkEqualOperator)
+{
   romea::core::RTLSTransceiver::EUID euid1{1, 1};
   romea::core::RTLSTransceiver::EUID euid2{1, 2};
   romea::core::RTLSTransceiver::EUID euid3{2, 1};
@@ -34,7 +35,8 @@ TEST(TestTransceiverEUID, checkEqualOperator) {
 }
 
 //-----------------------------------------------------------------------------
-TEST(TestTransceiverEUID, checkLowerThanOperator) {
+TEST(TestTransceiverEUID, checkLowerThanOperator)
+{
   romea::core::RTLSTransceiver::EUID euid00{0, 0};
   romea::core::RTLSTransceiver::EUID euid01{0, 1};
   romea::core::RTLSTransceiver::EUID euid10{1, 0};
@@ -46,7 +48,8 @@ TEST(TestTransceiverEUID, checkLowerThanOperator) {
 }
 
 //-----------------------------------------------------------------------------
-TEST(TestTransceiverEUID, checkLowerThanOperatorOnBoundaryValues) {
+TEST(TestTransceiverEUID, checkLowerThanOperatorOnBoundaryValues)
+{
   romea::core::RTLSTransceiver::EUID euid0Max{0, 65535};
   romea::core::RTLSTransceiver::EUID euid10{1, 0};
 
@@ -55,7 +58,8 @@ TEST(TestTransceiverEUID, checkLowerThanOperatorOnBoundaryValues) {
 }
 
 //-----------------------------------------------------------------------------
-TEST(TestTransceiverEUID, checkEUIDCanBeUsedInOrderedContainers) {
+TEST(TestTransceiverEUID, checkEUIDCanBeUsedInOrderedContainers)
+{
   std::set<romea::core::RTLSTransceiver::EUID> euids;
 
   euids.insert({0, 65535});
@@ -66,7 +70,8 @@ TEST(TestTransceiverEUID, checkEUIDCanBeUsedInOrderedContainers) {
 }
 
 //-----------------------------------------------------------------------------
-int main(int argc, char** argv) {
+int main(int argc, char ** argv)
+{
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }

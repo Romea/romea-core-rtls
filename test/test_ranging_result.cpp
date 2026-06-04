@@ -20,7 +20,8 @@
 #include "romea_core_rtls/ranging/result.hpp"
 
 //-----------------------------------------------------------------------------
-TEST(TestRangingResult, checkEmptyResult) {
+TEST(TestRangingResult, checkEmptyResult)
+{
   romea::core::RTLSRangingResult result;
   result.range = 0.;
   result.first_path_rx_power_level = 0;
@@ -30,7 +31,8 @@ TEST(TestRangingResult, checkEmptyResult) {
 }
 
 //-----------------------------------------------------------------------------
-TEST(TestRangingResult, testNotEmptyResult) {
+TEST(TestRangingResult, testNotEmptyResult)
+{
   romea::core::RTLSRangingResult result;
   result.range = 10.0;
   result.first_path_rx_power_level = 10;
@@ -39,7 +41,8 @@ TEST(TestRangingResult, testNotEmptyResult) {
 }
 
 //-----------------------------------------------------------------------------
-int main(int argc, char** argv) {
+int main(int argc, char ** argv)
+{
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }

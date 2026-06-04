@@ -16,23 +16,32 @@
 // romea core
 #include "romea_core_rtls/transceiver.hpp"
 
-namespace romea {
-namespace core {
+namespace romea
+{
+namespace core
+{
 
 //---------------------------------------------------------------------------
-RTLSTransceiver::RTLSTransceiver(const EUID& euid, const Function& function)
-    : euid_(euid), function_(function) {}
+RTLSTransceiver::RTLSTransceiver(const EUID & euid, const Function & function)
+: euid_(euid), function_(function)
+{
+}
 
 //---------------------------------------------------------------------------
-const RTLSTransceiver::EUID& RTLSTransceiver::get_euid() { return euid_; }
+const RTLSTransceiver::EUID & RTLSTransceiver::get_euid()
+{
+  return euid_;
+}
 
 //---------------------------------------------------------------------------
-const RTLSTransceiver::Function& RTLSTransceiver::get_function() {
+const RTLSTransceiver::Function & RTLSTransceiver::get_function()
+{
   return function_;
 }
 
 //-----------------------------------------------------------------------------
-RTLSTransceiver::Function string_to_function(const std::string& function) {
+RTLSTransceiver::Function string_to_function(const std::string & function)
+{
   if (function == "listener") {
     return RTLSTransceiver::Function::LISTENER;
   } else if (function == "initiator") {
@@ -45,7 +54,8 @@ RTLSTransceiver::Function string_to_function(const std::string& function) {
 }
 
 //-----------------------------------------------------------------------------
-std::string function_to_string(const RTLSTransceiver::Function& function) {
+std::string function_to_string(const RTLSTransceiver::Function & function)
+{
   switch (function) {
     case RTLSTransceiver::Function::LISTENER:
       return "listener";
@@ -60,14 +70,14 @@ std::string function_to_string(const RTLSTransceiver::Function& function) {
 }
 
 //-----------------------------------------------------------------------------
-bool operator==(const RTLSTransceiver::EUID& euid1,
-                const RTLSTransceiver::EUID& euid2) {
+bool operator==(const RTLSTransceiver::EUID & euid1, const RTLSTransceiver::EUID & euid2)
+{
   return euid1.id == euid2.id && euid1.pan_id == euid2.pan_id;
 }
 
 //-----------------------------------------------------------------------------
-bool operator<(const RTLSTransceiver::EUID& euid1,
-               const RTLSTransceiver::EUID& euid2) {
+bool operator<(const RTLSTransceiver::EUID & euid1, const RTLSTransceiver::EUID & euid2)
+{
   if (euid1.pan_id != euid2.pan_id) {
     return euid1.pan_id < euid2.pan_id;
   }

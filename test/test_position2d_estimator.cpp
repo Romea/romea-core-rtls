@@ -21,15 +21,15 @@
 #include "romea_core_rtls/trilateration/position2D_estimator.hpp"
 
 //-----------------------------------------------------------------------------
-TEST(TestRtlsPositionEstimator, testPositionEstimatorWithTwoAnchors) {
+TEST(TestRtlsPositionEstimator, testPositionEstimatorWithTwoAnchors)
+{
   auto tag0_position = Eigen::Vector3d(5.0, 2.0, 2.0);
   auto anchor0_position = Eigen::Vector3d(0.0, 0.3, 1);
   auto anchor1_position = Eigen::Vector3d(0.0, -0.3, 1);
   double r00 = (tag0_position - anchor0_position).head<2>().norm();
   double r01 = (tag0_position - anchor1_position).head<2>().norm();
 
-  romea::core::RTLSPosition2DEstimator estimator(
-      {anchor0_position, anchor1_position}, 0.001);
+  romea::core::RTLSPosition2DEstimator estimator({anchor0_position, anchor1_position}, 0.001);
   EXPECT_TRUE(estimator.init({r00, r01}));
   EXPECT_TRUE(estimator.estimate(20, 0.02));
 
@@ -40,7 +40,8 @@ TEST(TestRtlsPositionEstimator, testPositionEstimatorWithTwoAnchors) {
 }
 
 //-----------------------------------------------------------------------------
-TEST(TestRtlsPositionEstimator, testPositionEstimatorWithThreeAnchorsUp) {
+TEST(TestRtlsPositionEstimator, testPositionEstimatorWithThreeAnchorsUp)
+{
   auto tag0_position = Eigen::Vector3d(-4, 6, 1);
   auto anchor0_position = Eigen::Vector3d(0, 0.6, 2);
   auto anchor1_position = Eigen::Vector3d(0, -0.6, 1.5);
@@ -50,7 +51,7 @@ TEST(TestRtlsPositionEstimator, testPositionEstimatorWithThreeAnchorsUp) {
   double r02 = (tag0_position - anchor2Position).head<2>().norm();
 
   romea::core::RTLSPosition2DEstimator estimator(
-      {anchor0_position, anchor1_position, anchor2Position}, 0.001);
+    {anchor0_position, anchor1_position, anchor2Position}, 0.001);
 
   EXPECT_TRUE(estimator.init({r00, r01, r02}));
   EXPECT_TRUE(estimator.estimate(20, 0.02));
@@ -61,7 +62,8 @@ TEST(TestRtlsPositionEstimator, testPositionEstimatorWithThreeAnchorsUp) {
 }
 
 //-----------------------------------------------------------------------------
-TEST(TestRtlsPositionEstimator, testPositionEstimatorWithThreeAnchorsDown) {
+TEST(TestRtlsPositionEstimator, testPositionEstimatorWithThreeAnchorsDown)
+{
   auto tag0_position = Eigen::Vector3d(-6, -7, 1);
   auto anchor0_position = Eigen::Vector3d(0, 0.6, 2);
   auto anchor1_position = Eigen::Vector3d(0, -0.6, 1.5);
@@ -71,7 +73,7 @@ TEST(TestRtlsPositionEstimator, testPositionEstimatorWithThreeAnchorsDown) {
   double r02 = (tag0_position - anchor2Position).head<2>().norm();
 
   romea::core::RTLSPosition2DEstimator estimator(
-      {anchor0_position, anchor1_position, anchor2Position}, 0.001);
+    {anchor0_position, anchor1_position, anchor2Position}, 0.001);
   EXPECT_TRUE(estimator.init({r00, r01, r02}));
   EXPECT_TRUE(estimator.estimate(20, 0.02));
 
@@ -81,7 +83,8 @@ TEST(TestRtlsPositionEstimator, testPositionEstimatorWithThreeAnchorsDown) {
 }
 
 //-----------------------------------------------------------------------------
-int main(int argc, char** argv) {
+int main(int argc, char ** argv)
+{
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }

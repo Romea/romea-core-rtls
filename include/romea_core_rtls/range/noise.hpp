@@ -16,18 +16,21 @@
 #ifndef ROMEA_CORE_RTLS__RANGE__NOISE_HPP_
 #define ROMEA_CORE_RTLS__RANGE__NOISE_HPP_
 
-namespace romea {
-namespace core {
+namespace romea
+{
+namespace core
+{
 
-class RTLSRangeNoise {
- public:
+class RTLSRangeNoise
+{
+public:
   RTLSRangeNoise();
 
-  RTLSRangeNoise(const double& a, const double& b);
+  RTLSRangeNoise(const double & a, const double & b);
 
-  double compute_std(const double& range);
+  double compute_std(const double & range);
 
- private:
+private:
   double a_;
   double b_;
 };

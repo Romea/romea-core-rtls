@@ -22,10 +22,13 @@
 // romea
 #include <romea_core_common/time/Time.hpp>
 
-namespace romea {
-namespace core {
+namespace romea
+{
+namespace core
+{
 
-struct RTLSRangingRequest {
+struct RTLSRangingRequest
+{
   uint16_t responder_id;
   double timeout;
   std::vector<unsigned char> payload;

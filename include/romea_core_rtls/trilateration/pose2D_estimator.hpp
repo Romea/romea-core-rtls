@@ -24,27 +24,31 @@
 #include "romea_core_common/containers/Eigen/VectorOfEigenVector.hpp"
 #include "romea_core_common/regression/leastsquares/NLSE.hpp"
 
-namespace romea {
-namespace core {
+namespace romea
+{
+namespace core
+{
 
-class RTLSPose2DEstimator : public NLSE<double> {
- public:
+class RTLSPose2DEstimator : public NLSE<double>
+{
+public:
   using RangeVector = std::vector<std::optional<double>>;
   using RangeArray = std::vector<RangeVector>;
 
- public:
-  RTLSPose2DEstimator(const VectorOfEigenVector3d& targettag_positions,
-                      const VectorOfEigenVector3d& referencetag_positions,
-                      const double& estimateEpsilon = 0.01);
+public:
+  RTLSPose2DEstimator(
+    const VectorOfEigenVector3d & targettag_positions,
+    const VectorOfEigenVector3d & referencetag_positions,
+    const double & estimateEpsilon = 0.01);
 
-  bool init(const RangeArray& ranges);
+  bool init(const RangeArray & ranges);
 
- private:
+private:
   void computeGuess_() override;
 
   void computeJacobianAndY_() override;
 
- private:
+private:
   VectorOfEigenVector2d target_tag_positions_;
   VectorOfEigenVector2d reference_tag_positions_;
   std::vector<std::vector<double>> ranges_;

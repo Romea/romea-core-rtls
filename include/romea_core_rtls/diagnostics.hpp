@@ -28,46 +28,43 @@
 #include "romea_core_common/monitoring/RateMonitoring.hpp"
 #include "romea_core_rtls/ranging/result.hpp"
 
-namespace romea {
-namespace core {
+namespace romea
+{
+namespace core
+{
 
-class RTLSTransceiversDiagnostics {
- public:
-  RTLSTransceiversDiagnostics(const double& poll_rate,
-                              const std::vector<std::string>& initiators_names,
-                              const std::vector<std::string>& responders_names);
+class RTLSTransceiversDiagnostics
+{
+public:
+  RTLSTransceiversDiagnostics(
+    const double & poll_rate,
+    const std::vector<std::string> & initiators_names,
+    const std::vector<std::string> & responders_names);
 
-  void update(const size_t& initiators_poll_index,
-              const size_t& responders_poll_index,
-              const RTLSRangingResult& rangingResult);
+  void update(
+    const size_t & initiators_poll_index,
+    const size_t & responders_poll_index,
+    const RTLSRangingResult & rangingResult);
 
-  DiagnosticReport get_initiator_report(const size_t& initiator_index) const;
-  DiagnosticReport get_responder_report(const size_t& responder_index) const;
+  DiagnosticReport get_initiator_report(const size_t & initiator_index) const;
+  DiagnosticReport get_responder_report(const size_t & responder_index) const;
 
- private:
+private:
   void init_initiators_diagnostics_(
-      const double& poll_rate,
-      const std::vector<std::string>& initiators_names);
+    const double & poll_rate, const std::vector<std::string> & initiators_names);
 
   void init_responders_diagnostics_(
-      const double& poll_rate,
-      const std::vector<std::string>& responders_names);
+    const double & poll_rate, const std::vector<std::string> & responders_names);
 
-  void update_initiator_reliability_(const double& reliability,
-                                     const size_t& initiator_index);
+  void update_initiator_reliability_(const double & reliability, const size_t & initiator_index);
 
-  void update_responder_reliability_(const double& reliability,
-                                     const size_t& responder_index);
+  void update_responder_reliability_(const double & reliability, const size_t & responder_index);
 
- private:
-  std::vector<std::unique_ptr<OnlineAverage>>
-      responder_reliability_monitorings_;
-  std::vector<std::unique_ptr<CheckupReliability>>
-      responder_reliability_diagnostics_;
-  std::vector<std::unique_ptr<OnlineAverage>>
-      initiator_reliability_monitorings_;
-  std::vector<std::unique_ptr<CheckupReliability>>
-      initiator_reliability_diagnostics_;
+private:
+  std::vector<std::unique_ptr<OnlineAverage>> responder_reliability_monitorings_;
+  std::vector<std::unique_ptr<CheckupReliability>> responder_reliability_diagnostics_;
+  std::vector<std::unique_ptr<OnlineAverage>> initiator_reliability_monitorings_;
+  std::vector<std::unique_ptr<CheckupReliability>> initiator_reliability_diagnostics_;
 };
 
 }  // namespace core

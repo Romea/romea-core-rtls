@@ -15,18 +15,25 @@
 
 #include "romea_core_rtls/range/noise.hpp"
 
-namespace romea {
-namespace core {
+namespace romea
+{
+namespace core
+{
 
 //-----------------------------------------------------------------------------
-RTLSRangeNoise::RTLSRangeNoise() : a_(0), b_(0) {}
+RTLSRangeNoise::RTLSRangeNoise() : a_(0), b_(0)
+{
+}
 
 //-----------------------------------------------------------------------------
-RTLSRangeNoise::RTLSRangeNoise(const double& noiseA, const double& noiseB)
-    : a_(noiseA), b_(noiseB) {}
+RTLSRangeNoise::RTLSRangeNoise(const double & noiseA, const double & noiseB)
+: a_(noiseA), b_(noiseB)
+{
+}
 
 //-----------------------------------------------------------------------------
-double RTLSRangeNoise::compute_std(const double& range) {
+double RTLSRangeNoise::compute_std(const double & range)
+{
   return a_ * range + b_;
 }
 

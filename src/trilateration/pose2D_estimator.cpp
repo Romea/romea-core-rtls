@@ -22,32 +22,34 @@
 #include "romea_core_rtls/trilateration/pose2D_estimator.hpp"
 #include "romea_core_rtls/trilateration/simple_trilateration2D.hpp"
 
-namespace {
+namespace
+{
 const size_t MINIMAL_NUMBER_OF_TAGS_ON_TARGET_ENTITY = 2;
 const size_t MINIMAL_NUMBER_OF_TAGS_ON_REFERENCE_ENTITY = 3;
 const size_t MINIMAL_NUMBER_OF_RANGES_TO_COMPUTE_POSITION = 3;
 const size_t MINIMAL_NUMBER_OF_RANGES_FROM_EACH_TAG_TO_COMPUTE_POSE = 2;
 }  // namespace
 
-namespace romea {
-namespace core {
+namespace romea
+{
+namespace core
+{
 
 //-----------------------------------------------------------------------------
 RTLSPose2DEstimator::RTLSPose2DEstimator(
-    const VectorOfEigenVector3d& targettag_positions,
-    const VectorOfEigenVector3d& referencetag_positions,
-    const double& estimateEpsilon)
-    : NLSE(estimateEpsilon) {
+  const VectorOfEigenVector3d & targettag_positions,
+  const VectorOfEigenVector3d & referencetag_positions,
+  const double & estimateEpsilon)
+: NLSE(estimateEpsilon)
+{
   estimate_.resize(3);
   estimateCovariance_.resize(3, 3);
   leastSquares_.setEstimateSize(3);
 
-  ranges_.resize(targettag_positions.size(),
-                 std::vector<double>(referencetag_positions.size()));
+  ranges_.resize(targettag_positions.size(), std::vector<double>(referencetag_positions.size()));
 
   indexes_of_available_ranges_.resize(
-      targettag_positions.size(),
-      std::vector<size_t>(referencetag_positions.size()));
+    targettag_positions.size(), std::vector<size_t>(referencetag_positions.size()));
 
   target_tag_positions_.resize(targettag_positions.size());
   for (size_t i = 0; i < targettag_positions.size(); ++i) {
@@ -85,7 +87,8 @@ RTLSPose2DEstimator::RTLSPose2DEstimator(
 // }
 
 //-----------------------------------------------------------------------------
-bool RTLSPose2DEstimator::init(const RangeArray& ranges) {
+bool RTLSPose2DEstimator::init(const RangeArray & ranges)
+{
   const size_t numberOfReferenceTags = reference_tag_positions_.size();
   const size_t numberOfTargetTags = target_tag_positions_.size();
 
@@ -96,7 +99,7 @@ bool RTLSPose2DEstimator::init(const RangeArray& ranges) {
   for (size_t i = 0; i < numberOfTargetTags; i++) {
     indexes_of_available_ranges_[i].clear();
     for (size_t j = 0; j < numberOfReferenceTags; j++) {
-      const auto& range = ranges[i][j];
+      const auto & range = ranges[i][j];
       if (range.has_value()) {
         indexes_of_available_ranges_[i].push_back(j);
         ranges_[i][j] = range.value();
@@ -104,9 +107,9 @@ bool RTLSPose2DEstimator::init(const RangeArray& ranges) {
       }
     }
 
-    if (indexes_of_available_ranges_[i].size() != ranges_[i].size() &&
-        indexes_of_available_ranges_[i].size() <
-            MINIMAL_NUMBER_OF_RANGES_TO_COMPUTE_POSITION) {
+    if (
+      indexes_of_available_ranges_[i].size() != ranges_[i].size() &&
+      indexes_of_available_ranges_[i].size() < MINIMAL_NUMBER_OF_RANGES_TO_COMPUTE_POSITION) {
       return false;
     }
   }
@@ -184,17 +187,17 @@ bool RTLSPose2DEstimator::init(const RangeArray& ranges) {
 // }
 
 //-----------------------------------------------------------------------------
-void RTLSPose2DEstimator::computeGuess_() {
+void RTLSPose2DEstimator::computeGuess_()
+{
   VectorOfEigenVector2d targetTagGuessPositions(target_tag_positions_.size());
 
   for (size_t i = 0; i < target_tag_positions_.size(); i++) {
     targetTagGuessPositions[i] = SimpleTrilateration2D::compute(
-        reference_tag_positions_, ranges_[i], indexes_of_available_ranges_[i]);
+      reference_tag_positions_, ranges_[i], indexes_of_available_ranges_[i]);
   }
 
   FindRigidTransformationBySVD<Eigen::Vector2d> estimator_;
-  Eigen::Matrix3d H =
-      estimator_.find(target_tag_positions_, targetTagGuessPositions);
+  Eigen::Matrix3d H = estimator_.find(target_tag_positions_, targetTagGuessPositions);
   estimate_(0) = H(0, 2);
   estimate_(1) = H(1, 2);
   estimate_(2) = rotation2DToEulerAngle<double>(H.block(0, 0, 2, 2));
@@ -204,13 +207,14 @@ void RTLSPose2DEstimator::computeGuess_() {
 }
 
 //-----------------------------------------------------------------------------
-void RTLSPose2DEstimator::computeJacobianAndY_() {
-  auto& J = leastSquares_.getJ();
-  auto& Y = leastSquares_.getY();
+void RTLSPose2DEstimator::computeJacobianAndY_()
+{
+  auto & J = leastSquares_.getJ();
+  auto & Y = leastSquares_.getY();
 
   size_t n = 0;
   for (size_t i = 0; i < target_tag_positions_.size(); i++) {
-    for (const size_t& j : indexes_of_available_ranges_[i]) {
+    for (const size_t & j : indexes_of_available_ranges_[i]) {
       double x = estimate_(0);
       double y = estimate_(1);
       double o = estimate_(2);
@@ -229,7 +233,7 @@ void RTLSPose2DEstimator::computeJacobianAndY_() {
       Y(static_cast<int>(n)) = std::sqrt(alpha * alpha + gamma * gamma);
 
       J.row(static_cast<int>(n)) << alpha, gamma,
-          alpha * (-xt * sino - yt * coso) + gamma * (xt * coso - yt * sino);
+        alpha * (-xt * sino - yt * coso) + gamma * (xt * coso - yt * sino);
       J.row(static_cast<int>(n)) /= Y(static_cast<int>(n));
 
       Y(static_cast<int>(n)) -= ranges_[i][j];

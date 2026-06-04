@@ -22,17 +22,19 @@
 // romea
 #include "romea_core_common/pointset/KdTree.hpp"
 
-namespace romea {
-namespace core {
+namespace romea
+{
+namespace core
+{
 
-class RTLSNearbyTransceiverFinder {
- public:
-  RTLSNearbyTransceiverFinder(const VectorOfEigenVector3d& points,
-                              const double& researchRadius);
+class RTLSNearbyTransceiverFinder
+{
+public:
+  RTLSNearbyTransceiverFinder(const VectorOfEigenVector3d & points, const double & researchRadius);
 
-  const std::vector<size_t>& find(const Eigen::Vector3d& position);
+  const std::vector<size_t> & find(const Eigen::Vector3d & position);
 
- private:
+private:
   double squared_research_radius_;
   VectorOfEigenVector3d points_;
   KdTree<Eigen::Vector3d> kdtree_;

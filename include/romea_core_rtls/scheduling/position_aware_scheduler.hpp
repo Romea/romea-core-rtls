@@ -31,33 +31,37 @@
 #include "romea_core_rtls/scheduling/nearby_transceiver_finder.hpp"
 #include "romea_core_rtls/scheduling/round_robin_scheduler.hpp"
 
-namespace romea {
-namespace core {
+namespace romea
+{
+namespace core
+{
 
-class RTLSPositionAwareScheduler : public RTLSRoundRobinScheduler {
- public:
-  RTLSPositionAwareScheduler(const double& poll_rate,
-                             const double& maximal_range,
-                             const std::vector<std::string>& initiators_names,
-                             const VectorOfEigenVector3d& initiators_positions,
-                             const std::vector<std::string>& responders_names,
-                             const VectorOfEigenVector3d& responders_positions,
-                             RangingRequestCallback rangingRequestCallback);
+class RTLSPositionAwareScheduler : public RTLSRoundRobinScheduler
+{
+public:
+  RTLSPositionAwareScheduler(
+    const double & poll_rate,
+    const double & maximal_range,
+    const std::vector<std::string> & initiators_names,
+    const VectorOfEigenVector3d & initiators_positions,
+    const std::vector<std::string> & responders_names,
+    const VectorOfEigenVector3d & responders_positions,
+    RangingRequestCallback rangingRequestCallback);
 
   DiagnosticReport get_report() override;
 
   const std::vector<size_t> get_selected_responders_indexes();
 
-  void update_robot_position(const Eigen::Vector3d& robotPosition);
+  void update_robot_position(const Eigen::Vector3d & robotPosition);
 
- protected:
+protected:
   void timer_callback_() override;
 
   void increment_poll_indexes_() override;
 
   void select_responders_();
 
- private:
+private:
   std::mutex mutex_;
   TimePoint last_robot_position_stamp_;
   Eigen::Vector3d last_robot_position_;

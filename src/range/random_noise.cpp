@@ -15,19 +15,26 @@
 
 #include "romea_core_rtls/range/random_noise.hpp"
 
-namespace romea {
-namespace core {
+namespace romea
+{
+namespace core
+{
 
 //-----------------------------------------------------------------------------
 RTLSRangeRandomNoise::RTLSRangeRandomNoise()
-    : RTLSRangeNoise(0, 0), generator_(std::random_device{}()), dist_(0, 1) {}
+: RTLSRangeNoise(0, 0), generator_(std::random_device{}()), dist_(0, 1)
+{
+}
 
 //-----------------------------------------------------------------------------
-RTLSRangeRandomNoise::RTLSRangeRandomNoise(const double& a, const double& b)
-    : RTLSRangeNoise(a, b) {}
+RTLSRangeRandomNoise::RTLSRangeRandomNoise(const double & a, const double & b)
+: RTLSRangeNoise(a, b)
+{
+}
 
 //-----------------------------------------------------------------------------
-double RTLSRangeRandomNoise::draw(const double& range) {
+double RTLSRangeRandomNoise::draw(const double & range)
+{
   return dist_(generator_) * compute_std(range);
 }
 

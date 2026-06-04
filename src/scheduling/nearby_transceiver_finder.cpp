@@ -21,23 +21,27 @@
 // romea
 #include "romea_core_rtls/scheduling/nearby_transceiver_finder.hpp"
 
-namespace romea {
-namespace core {
+namespace romea
+{
+namespace core
+{
 
 //-----------------------------------------------------------------------------
 RTLSNearbyTransceiverFinder::RTLSNearbyTransceiverFinder(
-    const VectorOfEigenVector3d& points, const double& research_radius)
-    : squared_research_radius_(research_radius * research_radius),
-      points_(points),
-      kdtree_(points_),
-      neighbor_indexes_(points.size()),
-      neighbor_square_distances_(points.size()) {}
+  const VectorOfEigenVector3d & points, const double & research_radius)
+: squared_research_radius_(research_radius * research_radius),
+  points_(points),
+  kdtree_(points_),
+  neighbor_indexes_(points.size()),
+  neighbor_square_distances_(points.size())
+{
+}
 
 //-----------------------------------------------------------------------------
-const std::vector<size_t>& RTLSNearbyTransceiverFinder::find(
-    const Eigen::Vector3d& position) {
-  kdtree_.radiusResearch(position, squared_research_radius_, neighbor_indexes_,
-                         neighbor_square_distances_);
+const std::vector<size_t> & RTLSNearbyTransceiverFinder::find(const Eigen::Vector3d & position)
+{
+  kdtree_.radiusResearch(
+    position, squared_research_radius_, neighbor_indexes_, neighbor_square_distances_);
 
   std::sort(neighbor_indexes_.begin(), neighbor_indexes_.end());
   return neighbor_indexes_;

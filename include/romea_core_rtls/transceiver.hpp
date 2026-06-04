@@ -23,44 +23,51 @@
 #include "romea_core_rtls/ranging/request.hpp"
 #include "romea_core_rtls/ranging/response.hpp"
 
-namespace romea {
-namespace core {
+namespace romea
+{
+namespace core
+{
 
-class RTLSTransceiver {
- public:
-  struct EUID {
+class RTLSTransceiver
+{
+public:
+  struct EUID
+  {
     uint16_t pan_id;
     uint16_t id;
   };
 
-  enum class Function { INITIATOR, RESPONDER, LISTENER, NONE };
+  enum class Function
+  {
+    INITIATOR,
+    RESPONDER,
+    LISTENER,
+    NONE
+  };
 
- public:
-  explicit RTLSTransceiver(const EUID& euid,
-                           const Function& function = Function::NONE);
+public:
+  explicit RTLSTransceiver(const EUID & euid, const Function & function = Function::NONE);
 
   virtual ~RTLSTransceiver() = default;
 
-  virtual RTLSRangingResponse ranging(const RTLSRangingRequest& request) = 0;
+  virtual RTLSRangingResponse ranging(const RTLSRangingRequest & request) = 0;
 
-  const EUID& get_euid();
+  const EUID & get_euid();
 
-  const Function& get_function();
+  const Function & get_function();
 
- protected:
+protected:
   EUID euid_;
   Function function_;
 };
 
-RTLSTransceiver::Function string_to_function(const std::string& function);
+RTLSTransceiver::Function string_to_function(const std::string & function);
 
-std::string function_to_string(const RTLSTransceiver::Function& function);
+std::string function_to_string(const RTLSTransceiver::Function & function);
 
-bool operator==(const RTLSTransceiver::EUID& euid1,
-                const RTLSTransceiver::EUID& euid2);
+bool operator==(const RTLSTransceiver::EUID & euid1, const RTLSTransceiver::EUID & euid2);
 
-bool operator<(const RTLSTransceiver::EUID& euid1,
-               const RTLSTransceiver::EUID& euid2);
+bool operator<(const RTLSTransceiver::EUID & euid1, const RTLSTransceiver::EUID & euid2);
 
 }  // namespace core
 }  // namespace romea

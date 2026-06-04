@@ -26,21 +26,26 @@
 #include "romea_core_rtls/diagnostics.hpp"
 #include "romea_core_rtls/ranging/result.hpp"
 
-namespace romea {
-namespace core {
+namespace romea
+{
+namespace core
+{
 
-class RTLSRoundRobinScheduler {
- public:
+class RTLSRoundRobinScheduler
+{
+public:
   using RangingResult = RTLSRangingResult;
   using RangingRequestCallback = std::function<void(
-      const size_t& /*initiar_index*/, const size_t& /*responder_index*/,
-      const Duration& /*timeout*/)>;
+    const size_t & /*initiar_index*/,
+    const size_t & /*responder_index*/,
+    const Duration & /*timeout*/)>;
 
- public:
-  RTLSRoundRobinScheduler(const double& poll_rate,
-                          const std::vector<std::string>& initiators_names,
-                          const std::vector<std::string>& responders_names,
-                          RangingRequestCallback ranging_callback);
+public:
+  RTLSRoundRobinScheduler(
+    const double & poll_rate,
+    const std::vector<std::string> & initiators_names,
+    const std::vector<std::string> & responders_names,
+    RangingRequestCallback ranging_callback);
 
   virtual ~RTLSRoundRobinScheduler() = default;
 
@@ -48,17 +53,17 @@ class RTLSRoundRobinScheduler {
 
   void stop();
 
-  void feedback(const size_t& initiator_index, const size_t& responder_index,
-                const RangingResult& result);
+  void feedback(
+    const size_t & initiator_index, const size_t & responder_index, const RangingResult & result);
 
   virtual DiagnosticReport get_report();
 
- protected:
+protected:
   virtual void timer_callback_();
 
   virtual void increment_poll_indexes_();
 
- protected:
+protected:
   size_t number_of_initiators_;
   size_t initiators_poll_index_;
 

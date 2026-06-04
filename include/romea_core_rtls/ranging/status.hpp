@@ -19,24 +19,29 @@
 // romea
 #include "romea_core_rtls/ranging/result.hpp"
 
-namespace romea {
-namespace core {
+namespace romea
+{
+namespace core
+{
 
-enum class RTLSRangingStatus {
+enum class RTLSRangingStatus
+{
   FAILED = 0,
   UNAVAILABLE = 1,
   AVAILABLE = 2,
 };
 
-class RTLSRangingStatusEvaluator {
- public:
-  RTLSRangingStatusEvaluator(const double& minimal_range,
-                             const double& maximal_range,
-                             const uint8_t& rx_power_rejection_threshold = 255);
+class RTLSRangingStatusEvaluator
+{
+public:
+  RTLSRangingStatusEvaluator(
+    const double & minimal_range,
+    const double & maximal_range,
+    const uint8_t & rx_power_rejection_threshold = 255);
 
-  RTLSRangingStatus evaluate(const RTLSRangingResult& result);
+  RTLSRangingStatus evaluate(const RTLSRangingResult & result);
 
- private:
+private:
   double minimal_range_;
   double maximal_range_;
   uint8_t rx_power_rejection_threshold_;
