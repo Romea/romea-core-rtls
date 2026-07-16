@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="3">
   <name>romea_core_rtls</name>
-  <version>0.0.0</version>
+  <version>1.0.0</version>
   <description>The romea core rtls library</description>
   <author email="jean.laneurit@inrae.fr">Jean Laneurit</author>
   <maintainer email="jean.laneurit@inrae.fr">Jean Laneurit</maintainer>
@@ -11,5 +11,6 @@
   <export>
     <build_type>cmake</build_type>
   </export>
+  <depend>eigen</depend>
   <depend>romea_core_common</depend>
 </package>

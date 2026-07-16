@@ -2,12 +2,15 @@ cmake_minimum_required(VERSION 3.5)
 
 project(
   "romea_core_rtls"
-  VERSION 0.1.0
+  VERSION 1.0.0
   #  DESCRIPTION
   #  HOMEPAGE_URL
   LANGUAGES CXX)
 
+find_package(Eigen3 REQUIRED)
 find_package(romea_core_common REQUIRED)
+
+include(GNUInstallDirs)
 
 add_library(${PROJECT_NAME} SHARED
   src/diagnostics.cpp
@@ -29,20 +32,18 @@ target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
-target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC
-  ${romea_core_common_INCLUDE_DIRS})
+target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 
 target_compile_options(${PROJECT_NAME} PRIVATE
-  -Wall -Wextra -O3 -std=c++17)
+  -Wall -Wextra -O3)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
+  Eigen3::Eigen
   romea_core_common::romea_core_common)
-
-include(GNUInstallDirs)
 
 install(
   TARGETS ${PROJECT_NAME}
-  EXPORT ${PROJECT_NAME}Targets
+  EXPORT ${PROJECT_NAME}_Targets
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
@@ -61,7 +62,7 @@ configure_package_config_file(
   ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake)
 
 install(
-  EXPORT ${PROJECT_NAME}Targets
+  EXPORT ${PROJECT_NAME}_Targets
   FILE ${PROJECT_NAME}Targets.cmake
   NAMESPACE ${PROJECT_NAME}::
   DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake)
@@ -76,9 +77,7 @@ install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME}
 set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/LICENSE")
 
 
-option(BUILD_TESTING "BUILD WITH TESTS" ON)
-
+include(CTest)
 if(BUILD_TESTING)
-  enable_testing()
   add_subdirectory(test)
 endif()
